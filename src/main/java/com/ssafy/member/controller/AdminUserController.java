@@ -2,6 +2,7 @@ package com.ssafy.member.controller;
 
 import java.util.List;
 
+import com.ssafy.util.ResultDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 //@Controller
-@RequestMapping("/admin")
+@RequestMapping("/members")
 @CrossOrigin("*")
 @Api(tags = {"어드민 User 컨트롤러  API V1"})
 @Slf4j
@@ -48,39 +49,6 @@ public class AdminUserController {
 		this.memberService = memberService;
 	}
 
-//	@ResponseBody
-//	@RequestMapping(value = "/user", method = RequestMethod.GET, headers = { "Content-type=application/json" })
-//	public List<MemberDto> userList() throws Exception {
-//		List<MemberDto> list = memberService.listMember(null);
-//		logger.debug("회원목록 : {}", list);
-//		return list;
-////        return memberService.listMember();
-//	}
-//
-//	@RequestMapping(value = "/user", method = RequestMethod.POST, headers = { "Content-type=application/json" })
-//	public List<MemberDto> userRegister(@RequestBody MemberDto memberDto) throws Exception {
-//		memberService.joinMember(memberDto);
-//		return memberService.listMember(null);
-//	}
-//
-//	@RequestMapping(value = "/user/{userid}", method = RequestMethod.GET, headers = { "Content-type=application/json" })
-//	public MemberDto userInfo(@PathVariable("userid") String userid) throws Exception {
-//		return memberService.getMember(userid);
-//	}
-//
-//	@RequestMapping(value = "/user", method = RequestMethod.PUT, headers = { "Content-type=application/json" })
-//	public List<MemberDto> userModify(@RequestBody MemberDto memberDto) throws Exception {
-//		memberService.updateMember(memberDto);
-//		return memberService.listMember(null);
-//	}
-//
-//	@RequestMapping(value = "/user/{userid}", method = RequestMethod.DELETE, headers = {
-//			"Content-type=application/json" })
-//	public List<MemberDto> userDelete(@PathVariable("userid") String userid) throws Exception {
-//		memberService.deleteMember(userid);
-//		return memberService.listMember(null);
-//	}
-
 	@ApiOperation(value = "회원목록", notes = "회원의 <big>전체 목록</big>을 반환해 줍니다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "회원목록 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
 			@ApiResponse(code = 500, message = "서버에러!!") })
@@ -91,75 +59,88 @@ public class AdminUserController {
 			List<MemberDto> list = memberService.listMember(null);
 			if(list != null && !list.isEmpty()) {
 				return new ResponseEntity<List<MemberDto>>(list, HttpStatus.OK);
-//				return new ResponseEntity<List<MemberDto>>(HttpStatus.NOT_FOUND);
 			} else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
-		
 	}
 	
 	@ApiOperation(value = "회원등록", notes = "회원의 정보를 받아 처리.") //조건문 추가하기 (빈칸, 중복 등)
-	@PostMapping(value = "/user")
+	@PostMapping(value = "/")
 	public ResponseEntity<?> userRegister(@RequestBody MemberDto memberDto) {
 		log.debug("userRegister memberDto : {}", memberDto);
 		try {
 			memberService.joinMember(memberDto);
-			List<MemberDto> list = memberService.listMember(null);
-			return new ResponseEntity<List<MemberDto>>(list, HttpStatus.CREATED);
-			//성공, 실패로 리턴값 변경
-//			return new ResponseEntity<Integer>(cnt, HttpStatus.CREATED);
+			return new ResponseEntity<ResultDto>(new ResultDto("success", "회원등록 성공"), HttpStatus.OK);
 		} catch (Exception e) {
-			return exceptionHandling(e);
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "회원등록 실패"), HttpStatus.OK);
 		}
 		
 	}
-	
-	@ApiOperation(value = "회원정보", notes = "회원한명에 대한 정보.")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "userid", value = "아이디", required = true, dataType = "String", paramType = "path")
-//			@ApiImplicitParam(name = "param1", value = "파라미터1", required = true, dataType = "String", paramType = "query"),
-//			@ApiImplicitParam(name = "param2", value = "파마미터2", required = false, dataType = "int", paramType = "query") 
-	})
-	@GetMapping(value = "/user/{userid}")
-	public ResponseEntity<?> userInfo(@PathVariable("userid") String userId) {
-		log.debug("userInfo userid : {}", userId);
+
+	@ApiOperation(value = "회원조회", notes = "회원의 정보를 받아 처리.") //조건문 추가하기 (빈칸, 중복 등)
+	@GetMapping(value = "/{userId}")
+	public ResponseEntity<?> userInfo(@PathVariable String userId) {
 		try {
 			MemberDto memberDto = memberService.getMember(userId);
-			if(memberDto != null)
-				return new ResponseEntity<MemberDto>(memberDto, HttpStatus.OK);
-			else
-				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<MemberDto>(memberDto, HttpStatus.OK);
 		} catch (Exception e) {
-			return exceptionHandling(e);
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "회원조회 실패"), HttpStatus.OK);
 		}
 	}
-	
+
+	@ApiOperation(value = "로그인", notes = "입력된 정보로 로그인을 시도합니다.") //조건문 추가하기 (빈칸, 중복 등)
+	@GetMapping(value = "/login")
+	public ResponseEntity<?> userIogin(@RequestBody MemberDto memberDto) {
+		try {
+			MemberDto info = memberService.loginMember(memberDto);
+			if(info != null)
+				return new ResponseEntity<ResultDto>(new ResultDto("success", "로그인 성공"), HttpStatus.OK);
+			else
+				return new ResponseEntity<ResultDto>(new ResultDto("fail", "로그인 실패"), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "로그인 실패"), HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation(value = "비밀번호 찾기", notes = "회원의 비밀번호를 찾습니다.") //조건문 추가하기 (빈칸, 중복 등)
+	@GetMapping(value = "/login/{userId}")
+	public ResponseEntity<?> userFindPassword(@PathVariable String userId) {
+		try {
+			String password = memberService.findPassword(userId);
+			System.out.println(password);
+			if(password != null)
+				return new ResponseEntity<String>(password, HttpStatus.OK);
+			else
+				return new ResponseEntity<ResultDto>(new ResultDto("fail", "비밀번호찾기 실패"), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "비밀번호찾기 실패!"), HttpStatus.OK);
+		}
+	}
+
 	@ApiOperation(value = "회원정보수정", notes = "회원정보를 수정합니다.")
-	@PutMapping(value = "/user")
+	@PutMapping(value = "/")
 	public ResponseEntity<?> userModify(@RequestBody MemberDto memberDto) {
 		log.debug("userModify memberDto : {}", memberDto);
 		try {
 			memberService.updateMember(memberDto);
-			List<MemberDto> list = memberService.listMember(null);
-			return new ResponseEntity<List<MemberDto>>(list, HttpStatus.OK);
+			return new ResponseEntity<ResultDto>(new ResultDto("success", "회원정보수정 성공"), HttpStatus.OK);
 		} catch (Exception e) {
-			return exceptionHandling(e);
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "회원정보수정 실패"), HttpStatus.OK);
 		}
 	}
 	
 	@ApiOperation(value = "회원정보삭제", notes = "회원정보를 삭제합니다.")
-	@DeleteMapping(value = "/user/{userid}")
+	@DeleteMapping(value = "/{userid}")
 	public ResponseEntity<?> userDelete(@PathVariable("userid") String userId) { //조건문 추가하기 (회원 존재 여부)
 		log.debug("userDelete userid : {}", userId);
 		try {
 			memberService.deleteMember(userId);
-			List<MemberDto> list = memberService.listMember(null);
-			return new ResponseEntity<List<MemberDto>>(list, HttpStatus.OK);
+			return new ResponseEntity<ResultDto>(new ResultDto("success", "회원정보삭제 완료"), HttpStatus.OK);
 		} catch (Exception e) {
-			return exceptionHandling(e);
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "회원정보삭제 실패"), HttpStatus.OK);
 		}
 	}
 

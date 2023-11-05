@@ -1,17 +1,17 @@
-package com.ssafy.attraction.model;
+package com.ssafy.util;
 
-public class AttractionResult {
+public class ResultDto {
 	
 	private String state;
 	private String message;
 	
-	public AttractionResult(String state, String message) {
+	public ResultDto(String state, String message) {
 		super();
 		this.state = state;
 		this.message = message;
 	}
 	
-	public AttractionResult() {
+	public ResultDto() {
 		super();
 	}
 	

@@ -11,7 +11,7 @@
 	
 	<!-- ADMIN -->
 	<resultMap type="memberDto" id="memberAll" extends="member">
-		<result column="user_password" property="userPwd"/>
+		<result column="user_password" property="userPassword"/>
 		<result column="email_id" property="emailId"/>
 		<result column="email_domain" property="emailDomain"/>
 		<result column="join_date" property="joinDate"/>
@@ -20,18 +20,18 @@
 	<select id="idCheck" parameterType="String" resultType="int">
 		select count(user_id)
 		from members
-		where user_id = #{userid}
+		where user_id = #{userId}
 	</select>
 
 	<insert id="joinMember" parameterType="memberDto">
 		insert into members (user_name, user_id, user_password, email_id, email_domain, join_date)
-		values (#{userName}, #{userId}, #{userPwd}, #{emailId}, #{emailDomain}, now())
+		values (#{userName}, #{userId}, #{userPassword}, #{emailId}, #{emailDomain}, now())
 	</insert>
 
 	<select id="loginMember" parameterType="map" resultMap="member">
-		select user_id, user_name
+		select user_name, user_name
 		from members
-		where user_id = #{userid} and user_password = #{userpwd}
+		where user_name = #{userName} and user_password = #{userPassword}
 	</select>
 	
 	<!-- ADMIN -->
@@ -40,6 +40,14 @@
 		from members
 		order by join_date
 	</select>
+
+	<select id="findPassword" resultType="String">
+		select user_password
+		from members
+		where user_id=#{userId}
+	</select>
+
+
 	
 	<select id="getMember" parameterType="string" resultMap="memberAll">
 		select user_id, user_name, user_password, email_id, email_domain, join_date
@@ -50,7 +58,7 @@
 	<update id="updateMember" parameterType="memberDto">
 		update members
 		<trim prefix="set" suffixOverrides=",">
-			<if test="userPwd != null">user_password = #{userPwd},</if>
+			<if test="userPassword != null">user_password = #{userPassword},</if>
 			<if test="emailId != null">email_id = #{emailId},</if>
 			<if test="emailDomain != null">email_domain = #{emailDomain},</if>
 		</trim>

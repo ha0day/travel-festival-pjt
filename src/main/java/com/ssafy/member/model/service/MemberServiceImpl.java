@@ -1,5 +1,6 @@
 package com.ssafy.member.model.service;
 
+import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +37,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberDto loginMember(Map<String, String> map) throws Exception {
-//		return sqlSession.getMapper(MemberMapper.class).loginMember(map);
-		return memberMapper.loginMember(map);
+	public MemberDto loginMember(MemberDto memberDto) throws Exception {
+		return memberMapper.loginMember(memberDto);
 	}
 	
 	/* ADMIN */
@@ -62,4 +62,8 @@ public class MemberServiceImpl implements MemberService {
 		memberMapper.deleteMember(userId);		
 	}
 
+	@Override
+	public String findPassword(String userId) throws Exception{
+		return memberMapper.findPassword(userId);
+	}
 }

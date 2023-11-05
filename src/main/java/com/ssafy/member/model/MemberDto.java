@@ -35,12 +35,12 @@ public class MemberDto {
         this.userName = userName;
     }
 
-    public String getUserPwd() {
+    public String getUserPassword() {
         return userPassword;
     }
 
-    public void setUserPwd(String userPwd) {
-        this.userPassword = userPwd;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getEmailId() {
@@ -69,7 +69,7 @@ public class MemberDto {
 
     @Override
     public String toString() {
-        return "MemberDto [userId=" + userId + ", userName=" + userName + ", userPwd=" + userPassword + ", emailId="
+        return "MemberDto [userId=" + userId + ", userName=" + userName + ", userPassword=" + userPassword + ", emailId="
                 + emailId + ", emailDomain=" + emailDomain + ", joinDate=" + joinDate + "]";
     }
 

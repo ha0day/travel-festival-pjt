@@ -1,103 +1,92 @@
-# EnjoyTrip - 4조
+# EnjoyTrip_Spring_서울_15반_전하영_오영주
 
-**멤버: 전하영, 오영주**
 
-**API툴: Postman**
 
-# 1. **지역별 관광지 정보 수집**
+## Getting started
 
-## **Request:**
+To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-> - **sortType** : 정렬기준
-> - **contentTypeId** : 관광지 유형
-> - **sidoCode : 시도 코드**
-> - **gugunCode** : 구군 코드
-> - **title** : 검색 키워드
+Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-<img width="800" alt="image" src="/img/README/Untitled.png">
+## Add your files
 
-## **Response:**
+- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
+- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
 
-<img width="800" alt="image" src="/img/README/Untitled 1.png">
+```
+cd existing_repo
+git remote add origin https://lab.ssafy.com/ycis5013/enjoytrip_spring_seoul15_team4.git
+git branch -M master
+git push -uf origin master
+```
 
-# 2. 관광지 유형별 조회
+## Integrate with your tools
 
-\*\* 관광지, 숙박, 음식점, 문화시설, 공연, 여행코스, 쇼핑
+- [ ] [Set up project integrations](https://lab.ssafy.com/ycis5013/enjoytrip_spring_seoul15_team4/-/settings/integrations)
 
-## Request
+## Collaborate with your team
 
-> - **sortType** : 정렬기준
-> - **contentTypeId : 관광지 유형**
-> - **sidoCode** : 시도 코드
-> - **gugunCode** : 구군 코드
-> - **title** : 검색 키워드
+- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
+- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
+- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
+- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
+- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
 
-<img width="800" alt="image" src="/img/README/Untitled 2.png">
+## Test and Deploy
 
-## Response
+Use the built-in continuous integration in GitLab.
 
-<img width="800" alt="image" src="/img/README/Untitled 3.png">
+- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
+- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
+- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
+- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
+- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-# 3. 회원 관리
+***
 
-## 1) 회원가입
+# Editing this README
 
-### Request
+When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-<img width="800" alt="image" src="/img/README/Untitled 4.png">
+## Suggestions for a good README
+Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-### Response
+## Name
+Choose a self-explaining name for your project.
 
-<img width="800" alt="image" src="/img/README/Untitled 5.png">
+## Description
+Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## 2) 회원 정보 수정
+## Badges
+On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
-### Request
+## Visuals
+Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-<img width="800" alt="image" src="/img/README/Untitled 6.png">
+## Installation
+Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-### Response
+## Usage
+Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-<img width="800" alt="image" src="/img/README/Untitled 7.png">
+## Support
+Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-## 3) 회원 정보 조회
+## Roadmap
+If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-### Request
+## Contributing
+State if you are open to contributions and what your requirements are for accepting them.
 
-<img width="800" alt="image" src="/img/README/Untitled 8.png">
+For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-### Response
+You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-<img width="800" alt="image" src="/img/README/Untitled 9.png">
+## Authors and acknowledgment
+Show your appreciation to those who have contributed to the project.
 
-## 4) 회원 정보 삭제
+## License
+For open source projects, say how it is licensed.
 
-### Request
-
-<img width="800" alt="image" src="/img/README/Untitled 10.png">
-
-### Response
-
-<img width="800" alt="image" src="/img/README/Untitled 11.png">
-
-# 4. 로그인
-
-## 1) 로그인
-
-### Request
-
-<img width="800" alt="image" src="/img/README/Untitled 12.png">
-
-### Response
-
-<img width="800" alt="image" src="/img/README/Untitled 13.png">
-
-## 2) 비밀번호 찾기
-
-### Request
-
-<img width="800" alt="image" src="/img/README/Untitled 14.png">
-
-### Response
-
-<img width="800" alt="image" src="/img/README/Untitled 15.png">
+## Project status
+If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
