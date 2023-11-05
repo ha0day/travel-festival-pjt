@@ -18,7 +18,7 @@
 
 ## **Response:**
 
-<img width="800" alt="image" src="/img/README/Untitled1.png">
+<img width="800" alt="image" src="/img/README/Untitled 1.png">
 
 # 2. 관광지 유형별 조회
 
@@ -32,11 +32,11 @@
 > - **gugunCode** : 구군 코드
 > - **title** : 검색 키워드
 
-<img width="800" alt="image" src="/img/README/Untitled2.png">
+<img width="800" alt="image" src="/img/README/Untitled 2.png">
 
 ## Response
 
-<img width="800" alt="image" src="/img/README/Untitled3.png">
+<img width="800" alt="image" src="/img/README/Untitled 3.png">
 
 # 3. 회원 관리
 
@@ -44,41 +44,41 @@
 
 ### Request
 
-<img width="800" alt="image" src="/img/README/Untitled4.png">
+<img width="800" alt="image" src="/img/README/Untitled 4.png">
 
 ### Response
 
-<img width="800" alt="image" src="/img/README/Untitled5.png">
+<img width="800" alt="image" src="/img/README/Untitled 5.png">
 
 ## 2) 회원 정보 수정
 
 ### Request
 
-<img width="800" alt="image" src="/img/README/Untitled6.png">
+<img width="800" alt="image" src="/img/README/Untitled 6.png">
 
 ### Response
 
-<img width="800" alt="image" src="/img/README/Untitled7.png">
+<img width="800" alt="image" src="/img/README/Untitled 7.png">
 
 ## 3) 회원 정보 조회
 
 ### Request
 
-<img width="800" alt="image" src="/img/README/Untitled8.png">
+<img width="800" alt="image" src="/img/README/Untitled 8.png">
 
 ### Response
 
-<img width="800" alt="image" src="/img/README/Untitled9.png">
+<img width="800" alt="image" src="/img/README/Untitled 9.png">
 
 ## 4) 회원 정보 삭제
 
 ### Request
 
-<img width="800" alt="image" src="/img/README/Untitled10.png">
+<img width="800" alt="image" src="/img/README/Untitled 10.png">
 
 ### Response
 
-<img width="800" alt="image" src="/img/README/Untitled11.png">
+<img width="800" alt="image" src="/img/README/Untitled 11.png">
 
 # 4. 로그인
 
@@ -86,18 +86,18 @@
 
 ### Request
 
-<img width="800" alt="image" src="/img/README/Untitled12.png">
+<img width="800" alt="image" src="/img/README/Untitled 12.png">
 
 ### Response
 
-<img width="800" alt="image" src="/img/README/Untitled13.png">
+<img width="800" alt="image" src="/img/README/Untitled 13.png">
 
 ## 2) 비밀번호 찾기
 
 ### Request
 
-<img width="800" alt="image" src="/img/README/Untitled14.png">
+<img width="800" alt="image" src="/img/README/Untitled 14.png">
 
 ### Response
 
-<img width="800" alt="image" src="/img/README/Untitled15.png">
+<img width="800" alt="image" src="/img/README/Untitled 15.png">
