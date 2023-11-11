@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.plan.model.mapper.PlanMapper">
+
+	<resultMap type="planDto" id="plan">
+		<result column="plan_id" property="planId" />
+		<result column="user_id" property="userId" />
+		<result column="plan_name" property="planName" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="reg_date" property="regDate" />
+		<result column="plan_detail" property="planDetail" />
+	</resultMap>
+ 
+	<resultMap type="planDto" id="viewPlans" extends="plan">
+		<collection property="attrInfoList" column="plan_id"
+			javaType="list" ofType="attractionInfoDto" select="getAttrInfoList" />
+	</resultMap>
+
+ 	<resultMap type="attractionInfoDto" id="attr">
+		<result column="addr1" property="addr1" />
+		<result column="addr2" property="addr2" />
+		<result column="content_id" property="contentId" />
+		<result column="content_type_id" property="contentTypeId" />
+		<result column="first_image" property="firstImage" />
+		<result column="first_image2" property="firstImage2" />
+		<result column="gugun_code" property="gugunCode" />
+		<result column="latitude" property="latitude" />
+		<result column="longitude" property="longitude" />
+		<result column="mlevel" property="mlevel" />
+		<result column="readcount" property="readcount" />
+		<result column="sido_code" property="sidoCode" />
+		<result column="tel" property="tel" />
+		<result column="title" property="title" />
+		<result column="zipcode" property="zipcode" />
+	</resultMap>
+
+
+	<sql id="search">
+		<if test='word !=null'>
+			<if test='key !=null and key.equals("plan_name")'>
+				where plan_name like concat('%', #{word}, '%')
+			</if>
+			<if test='key !=null and key.equals("user_id")'>
+				where user_id like concat('%', #{word}, '%')
+			</if>
+			<!-- <if test="key != 'subject'"> and ${key} = #{word} </if> -->
+		</if>
+	</sql>
+
+	<select id="planList" parameterType="planParamDto" resultMap="plan">
+		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail
+		from plan
+		<include refid="search"></include>
+		<!-- limit #{start}, #{listsize} -->
+	</select>
+	
+ 	<select id="planDetail" parameterType="int" resultMap="viewPlans">
+		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail
+		from plan
+		where plan_id = #{planId}
+	</select>
+
+
+  	<select id="getAttrInfoList" resultMap="attr">
+		select addr1, addr2, content_id, content_type_id, first_image, first_image2, gugun_code,
+		latitude, longitude, mlevel, readcount, sido_code, tel, title, zipcode
+		from attraction_info
+		where content_id in (
+				select pta.content_id 
+				from plan_to_attr pta 
+				where pta.plan_id= #{planId} 
+				)
+	</select>
+
+
+	<insert id="writePlan" parameterType="planDto">
+		insert into plan (user_id, plan_name, start_date, end_date, reg_date, plan_detail)
+		values (#{userId}, #{planName}, #{startDate}, #{endDate}, curdate(),#{planDetail})
+		<selectKey resultType="int" keyProperty="planId" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<update id="modifyPlan" parameterType="planDto">
+		update plan
+		set plan_name = #{planName}, start_date = #{startDate}, end_date = #{endDate}, plan_detail = #{planDetail}
+		where plan_id = #{planId}
+	</update>
+
+	<delete id="deletePlan" parameterType="int">
+		delete from plan
+		where plan_id = #{planId}
+	</delete>
+</mapper>

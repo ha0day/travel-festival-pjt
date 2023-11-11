@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.attraction.model.mapper.AttractionMapper">
+
+	<resultMap type="attractionInfoDto" id="attractionInfo">
+		<result column="addr1" property="addr1" />
+		<result column="addr2" property="addr2" />
+		<result column="content_id" property="contentId" />
+		<result column="content_type_id" property="contentTypeId" />
+		<result column="first_image" property="firstImage" />
+		<result column="first_image2" property="firstImage2" />
+		<result column="gugun_code" property="gugunCode" />
+		<result column="latitude" property="latitude" />
+		<result column="longitude" property="longitude" />
+		<result column="mlevel" property="mlevel" />
+		<result column="readcount" property="readcount" />
+		<result column="sido_code" property="sidoCode" />
+		<result column="tel" property="tel" />
+		<result column="title" property="title" />
+		<result column="zipcode" property="zipcode" />
+	</resultMap>
+
+
+	<select id="attractionList" parameterType="AttractionSearchDto"
+		resultMap="attractionInfo">
+		select content_id, content_type_id, title, addr1, addr2,zipcode, tel,
+		first_image, first_image2, readcount,
+		sido_code, gugun_code, latitude,
+		longitude, mlevel
+		from attraction_info
+		<if
+			test=' sidoCode != 0 and contentTypeId != 0 and gugunCode != 0 '>
+			WHERE sido_code = #{sidoCode} and gugun_code = #{gugunCode} and
+			content_type_id = #{contentTypeId}
+		</if>
+		<if
+			test=' sidoCode != 0 and contentTypeId == 0 and gugunCode == 0 '>
+			WHERE sido_code = #{sidoCode}
+		</if>
+		<if test=' sidoCode == 0 and contentTypeId != 0 '>
+			WHERE content_type_id = #{contentTypeId}
+		</if>
+		<if
+			test=' sidoCode != 0 and contentTypeId == 0 and gugunCode != 0 '>
+			WHERE sido_code = #{sidoCode} and gugun_code = #{gugunCode}
+		</if>
+		<if
+			test=' sidoCode != 0 and contentTypeId != 0 and gugunCode == 0 '>
+			WHERE sido_code = #{sidoCode} and content_type_id =
+			#{contentTypeId}
+		</if>
+		<if test=' sidoCode == 0 and contentTypeId == 0 '>
+			<if test=' title != null'>
+				WHERE title like CONCAT('%',#{title},'%')
+			</if>
+		</if>
+		<if test=' sidoCode != 0 or contentTypeId != 0 '>
+			<if test=' title != null'>
+				AND title like CONCAT('%',#{title},'%')
+			</if>
+		</if>
+	</select>
+</mapper>
+

@@ -1,0 +1,23 @@
+package com.ssafy.plan.model.service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.ssafy.plan.model.PlanDto;
+import com.ssafy.plan.model.PlanParamDto;
+import com.ssafy.util.PageNavigation;
+
+public interface PlanService {
+	
+	List<PlanDto> planList(PlanParamDto planParamDto) throws Exception;
+	PlanDto planDetail(int planId) throws Exception;
+	void writePlan(PlanDto planDto) throws Exception;
+	void modifyPlan(PlanDto planDto) throws Exception;
+	void deletePlan(int planId) throws Exception;
+	
+	
+}
