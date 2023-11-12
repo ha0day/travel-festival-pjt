@@ -1,0 +1,26 @@
+<script setup>
+import BoardCardList from "../components/board/BoardCardList.vue";
+import { ref } from 'vue';
+import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const route = useRoute(); // 경로 매칭
+const planId = ref(route.params.planId);
+
+const addPlan = () => {
+  router.push({ path: "/addplan"});
+};
+</script>
+
+<template>
+  <div class="row g-5">
+    <div class="col-md-12">
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">나의여행계획게시판</h3>
+      <board-card-list></board-card-list>
+      <div class="modal-footer m-3">
+        <button type="button" class="btn btn-primary" @click="addPlan()">여행계획추가</button>
+      </div>
+    </div>
+  </div>
+</template>
