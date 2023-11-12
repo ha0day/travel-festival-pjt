@@ -12,6 +12,7 @@
 		<result column="end_date" property="endDate" />
 		<result column="reg_date" property="regDate" />
 		<result column="plan_detail" property="planDetail" />
+		<result column="img" property="img" />
 	</resultMap>
  
 	<resultMap type="planDto" id="viewPlans" extends="plan">
@@ -51,14 +52,14 @@
 	</sql>
 
 	<select id="planList" parameterType="planParamDto" resultMap="plan">
-		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail
+		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail, img
 		from plan
 		<include refid="search"></include>
 		<!-- limit #{start}, #{listsize} -->
 	</select>
 	
  	<select id="planDetail" parameterType="int" resultMap="viewPlans">
-		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail
+		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail, img
 		from plan
 		where plan_id = #{planId}
 	</select>
@@ -77,8 +78,8 @@
 
 
 	<insert id="writePlan" parameterType="planDto">
-		insert into plan (user_id, plan_name, start_date, end_date, reg_date, plan_detail)
-		values (#{userId}, #{planName}, #{startDate}, #{endDate}, curdate(),#{planDetail})
+		insert into plan (user_id, plan_name, start_date, end_date, reg_date, plan_detail,img)
+		values (#{userId}, #{planName}, #{startDate}, #{endDate}, curdate(),#{planDetail},#{img})
 		<selectKey resultType="int" keyProperty="planId" order="AFTER">
 			select last_insert_id()
 		</selectKey>
@@ -86,7 +87,35 @@
 	
 	<update id="modifyPlan" parameterType="planDto">
 		update plan
-		set plan_name = #{planName}, start_date = #{startDate}, end_date = #{endDate}, plan_detail = #{planDetail}
+		set
+		<if test='plan_name !=null'>
+			plan_name = #{planName}
+			<if test='start_date !=null or end_date !=null or plan_detail !=null or img !=null'>
+				, 
+			</if>
+		</if>
+		<if test='start_date !=null'>
+			start_date = #{startDate}
+			<if test='end_date !=null or plan_detail !=null or img !=null'>
+				, 
+			</if>
+		</if>
+		<if test='end_date !=null'>
+			end_date = #{endDate}
+			<if test='plan_detail !=null or img !=null'>
+				, 
+			</if>
+		</if>
+		<if test='plan_detail !=null'>
+			plan_detail = #{planDetail}
+			<if test='img !=null'>
+				, 
+			</if>
+		</if>
+		<if test='img !=null'>
+			, img = #{img}
+		</if>	
+		plan_name = #{planName}, start_date = #{startDate}, end_date = #{endDate}, plan_detail = #{planDetail}, img = #{img}
 		where plan_id = #{planId}
 	</update>
 
