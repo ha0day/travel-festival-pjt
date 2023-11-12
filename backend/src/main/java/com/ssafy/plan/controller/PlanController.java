@@ -114,6 +114,7 @@ public class PlanController {
 			return new ResponseEntity<ResultDto>(new ResultDto("success", "수정 성공"), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<ResultDto>(new ResultDto("fail", "수정 실패"), HttpStatus.OK);
+			
 		}
 	}
 

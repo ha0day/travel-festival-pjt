@@ -88,34 +88,33 @@
 	<update id="modifyPlan" parameterType="planDto">
 		update plan
 		set
-		<if test='plan_name !=null'>
+		<if test='planName !=null'>
 			plan_name = #{planName}
-			<if test='start_date !=null or end_date !=null or plan_detail !=null or img !=null'>
+			<if test='startDate !=null or endDate !=null or planDetail !=null or img !=null'>
 				, 
 			</if>
 		</if>
-		<if test='start_date !=null'>
+		<if test='startDate !=null'>
 			start_date = #{startDate}
-			<if test='end_date !=null or plan_detail !=null or img !=null'>
+			<if test='endDate !=null or planDetail !=null or img !=null'>
 				, 
 			</if>
 		</if>
-		<if test='end_date !=null'>
+		<if test='endDate !=null'>
 			end_date = #{endDate}
-			<if test='plan_detail !=null or img !=null'>
+			<if test='planDetail !=null or img !=null'>
 				, 
 			</if>
 		</if>
-		<if test='plan_detail !=null'>
+		<if test='planDetail !=null'>
 			plan_detail = #{planDetail}
 			<if test='img !=null'>
 				, 
 			</if>
 		</if>
 		<if test='img !=null'>
-			, img = #{img}
-		</if>	
-		plan_name = #{planName}, start_date = #{startDate}, end_date = #{endDate}, plan_detail = #{planDetail}, img = #{img}
+			img = #{img}
+		</if>
 		where plan_id = #{planId}
 	</update>
 

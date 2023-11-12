@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ssafy</groupId>
-	<artifactId>enjoytrip_vue_seoul15_team4</artifactId>
+	<artifactId>enjoytrip_spring_seoul15_team4</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>enjoytrip_vue_seoul15_team4</name>
+	<name>enjoytrip_spring_seoul15_team4</name>
 	<description>board project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
