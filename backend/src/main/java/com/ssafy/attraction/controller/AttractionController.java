@@ -58,6 +58,26 @@ public class AttractionController {
 			return new ResponseEntity<ResultDto>(new ResultDto("fail", "NO LIST"), HttpStatus.OK);
 		}
 	}
+
+	@ApiOperation(value = "관광지 검색", notes = "관광지의 <big> 검색결과</big>을 반환해 줍니다.")
+	@ApiResponses({ @ApiResponse(code = 200, message = "관광지 목록 OK!!"), @ApiResponse(code = 404, message = "페이지 없어!!"),
+			@ApiResponse(code = 500, message = "서버에러!!") })
+	@PostMapping(value = "/search")
+	public ResponseEntity<?> attractionSearch(@RequestBody String word) {
+		try {
+			System.out.println("검색어: " + word);
+			List<AttractionInfoDto> list = attractionService.attractionSearch(word);
+			System.out.println(list);
+			if (list != null && !list.isEmpty()) {
+				return new ResponseEntity<List<AttractionInfoDto>>(list, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<ResultDto>(new ResultDto("fail", "NO RESULT"), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "NO LIST"), HttpStatus.OK);
+		}
+	}
 	
 	private List<AttractionInfoDto> attractionSort(List<AttractionInfoDto> attractions, int search_sort) {
 

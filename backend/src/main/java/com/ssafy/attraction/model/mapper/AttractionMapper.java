@@ -12,5 +12,6 @@ import com.ssafy.attraction.model.AttractionSearchDto;
 public interface AttractionMapper {
 
 	List<AttractionInfoDto> attractionList(AttractionSearchDto attractionSearchDto) throws SQLException;
-	
+
+    List<AttractionInfoDto> attractionSearch(String word) throws SQLException;
 }

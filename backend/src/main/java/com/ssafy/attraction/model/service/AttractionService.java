@@ -8,5 +8,6 @@ import com.ssafy.attraction.model.AttractionSearchDto;
 public interface AttractionService {
 	
 	List<AttractionInfoDto> attractionList(AttractionSearchDto attractionSearchDto) throws Exception;
-	
+
+	List<AttractionInfoDto> attractionSearch(String word) throws Exception;
 }

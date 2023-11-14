@@ -23,4 +23,9 @@ public class AttractionServiceImpl implements AttractionService {
 	public List<AttractionInfoDto> attractionList(AttractionSearchDto attractionSearchDto) throws Exception {
 		return attractionMapper.attractionList(attractionSearchDto);
 	}
+
+	@Override
+	public List<AttractionInfoDto> attractionSearch(String word) throws Exception {
+		return attractionMapper.attractionSearch(word);
+	}
 }
