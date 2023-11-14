@@ -11,7 +11,7 @@ import MainNav from "./components/MainNav.vue";
   </header>
 
   <main class="container">
-    <main-nav></main-nav>
+    <!-- <main-nav></main-nav> -->
     <router-view></router-view>
   </main>
   <footer class="blog-footer">

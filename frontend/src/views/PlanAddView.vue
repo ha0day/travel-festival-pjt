@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import api from "axios";
 
@@ -12,9 +12,13 @@ const plan = ref({
   startDate: "",
   endDate: "",
   planDetail: "",
+  attrInfo: [],
   img: "https://img.freepik.com/free-photo/airplane_74190-464.jpg?w=1380&t=st=1699807779~exp=1699808379~hmac=aa5cc0c5c8e05a2a1437b84eec67fc7e174e450c93e37d6996ca134b2a9a4184",
 });
 
+const hasAttr = computed(() => {
+  return plan.value.attrInfo.length > 0 ? true : false;
+})
 
 const addPlan = async () => {
   await api
@@ -37,6 +41,7 @@ const addPlan = async () => {
 </script>
 
 <template>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <div class="row g-5">
     <div class="col-md-12">
       <h3 class="pb-4 mb-4 fst-italic border-bottom">내 마음대로 여행코스!!!</h3>
@@ -55,24 +60,27 @@ const addPlan = async () => {
 
                   <h6 class="card-subtitle mx-auto d-block mb-3">[{{ plan.userId }}]님</h6>
 
-                  <input type="text" class="form-control mb-3" id="startDate" placeholder="시작날짜를 입력하세요."
-                    v-model="plan.startDate">
-                  <input type="text" class="form-control" id="endDate" placeholder="마지막날짜를 입력하세요." v-model="plan.endDate">
+                <input type="text" class="form-control mb-3" id="startDate" placeholder="시작날짜를 입력하세요."
+                  v-model="plan.startDate">
+                <input type="text" class="form-control" id="endDate" placeholder="마지막날짜를 입력하세요." v-model="plan.endDate">
 
-                  <h4 class="box-title mt-5">[ 세부 내용 ]</h4>
-                  <textarea class="form-control mb-5" id="planDetail" rows="3" v-model="plan.planDetail"
-                    placeholder="세부 내용을 입력하세요.">
-                                          </textarea>
-                </div>
+                <h4 class="box-title mt-5">[ 세부 내용 ]</h4>
+                <textarea class="form-control mb-5" id="planDetail" rows="3" v-model="plan.planDetail"
+                  placeholder="세부 내용을 입력하세요."></textarea>
               </div>
+            </div>
 
-              <div class="timeline">
-                <div class="timeline-row" v-for="(attrInfo, index) in plan.attrInfoList" :key="index">
-                  <div class="timeline-time">
-                    7:45PM<small>Dec 21</small>
-                  </div>
-                  <div class="timeline-content">
-                    <!-- <i class="icon-attachment"></i> -->
+
+
+            <!-- 여행장소추가부분 -->
+
+            <div v-show="hasAttr" class="timeline">
+              <div class="timeline-row" v-for="(attrInfo, index) in plan.attrInfoList" :key="index">
+                <div class="timeline-time">
+                  7:45PM<small>Dec 21</small>
+                </div>
+                <div class="timeline-content">
+                  <i class="icon-attachment"></i>
                     <h4>{{ attrInfo.title }}</h4>
                     <p>여기서는 무엇을 할것입니다. 첫번째 여행지의 세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의 세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의
                       세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의 세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의 세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의
@@ -84,9 +92,20 @@ const addPlan = async () => {
                 </div>
               </div>
 
-              <div class="m-2 p-1 row">
+
+              <div class="m-2 mb-3 row justify-content-center">
+                <div class="input-group justify-content-center col-md-2">
+                  <input type="text" class="form-control" placeholder="장소를 검색하세요."
+                    aria-label="장소를 검색하세요." aria-describedby="button-addon2">
+                  <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+                </div>
+              </div>
+
+
+
+              <div class="m-2 p-1 row justify-content-end">
                 <button type="button" class="btn btn-primary float-right m-2 col-1" data-bs-toggle="modal"
-                  data-bs-target="#addModal">추가하기</button>
+                  data-bs-target="#addModal">완료</button>
               </div>
 
 
@@ -343,5 +362,22 @@ body {
   .timeline .timeline-row:nth-child(even) .timeline-content:after {
     display: none;
   }
+}
+
+.btn-circle.btn-xl {
+  width: 50px;
+  height: 50px;
+  padding: 8px 12px;
+  border-radius: 35px;
+  font-size: 24px;
+}
+
+.btn-circle {
+  width: 9px;
+  height: 9px;
+  /* padding: 4px 0px; */
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
 }
 </style>

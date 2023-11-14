@@ -5,7 +5,7 @@ import { RouterLink } from "vue-router";
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"> EnjoyTrips </a>
+      <a class="navbar-brand" href="/"> EnjoyTrips </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -19,8 +19,8 @@ import { RouterLink } from "vue-router";
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav m-auto">
+      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav m-1">
           <li class="nav-item">
             <router-link to="/" class="nav-link active" aria-current="page"
               >지역별 여행지</router-link

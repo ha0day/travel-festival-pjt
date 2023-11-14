@@ -127,8 +127,7 @@ onMounted(() => {
 
 
               </div>
-              <div class="m-2 p-1 row">
-
+              <div class="m-2 p-1 row justify-content-end">
                 <button v-if="!isEdit" @click="editPlan()" type="button"
                   class="btn btn-primary float-right m-2 col-1">수정</button>
                 <button v-else type="button" class="btn btn-primary float-right m-2 col-1" data-bs-toggle="modal"
