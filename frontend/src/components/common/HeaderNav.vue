@@ -33,6 +33,9 @@ import { RouterLink } from "vue-router";
             <a href="/" class="nav-link active" aria-current="page">핫플자랑하기</a>
           </li>
           <li class="nav-item">
+            <a href="/login" class="nav-link active" aria-current="page">로그인/회원가입</a>
+          </li>
+          <li class="nav-item">
             <a href="/" class="btn btn-sm btn-outline-secondary">여행정보공유</a>
           </li>
         </ul>

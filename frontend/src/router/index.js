@@ -4,6 +4,8 @@ import BoardDetailView from "../views/BoardDetailView.vue";
 import PlanListView from "../views/PlanListView.vue";
 import PlanDetailView from "../views/PlanDetailView.vue";
 import PlanAddView from "../views/PlanAddView.vue";
+import LoginView from "../views/LoginView.vue";
+import RegisterView from "../views/RegisterView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,10 +35,21 @@ const router = createRouter({
       path: "/plandetail/:id",
       name: "plandetail",
       component: PlanDetailView,
-    },{
+    },
+    {
       path: "/addplan",
       name: "addplan",
       component: PlanAddView,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterView,
     },
   ],
 });
