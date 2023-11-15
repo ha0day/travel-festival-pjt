@@ -3,7 +3,7 @@ import jwtDecode from "jwt-decode";
 import router from "@/router";
 
 import { login, findById, tokenRegeneration, logout, modify, deleteUser } from "@/api/user";
-
+//npm i pinia-plugin-persistedstate --force
 export const userStore = defineStore("userPiniaStore", {
   persist: {
     storage: sessionStorage, //쓰고싶은 스토리지(세션 또는 로컬)
@@ -147,10 +147,7 @@ export const userStore = defineStore("userPiniaStore", {
           }
         },
         async (error) => {
-          console.log(
-            "modifyUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
-            error.response.status
-          );
+          console.log("modifyUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error);
           this.isValidToken = false;
           this.tokenRegeneration();
         }
@@ -174,10 +171,7 @@ export const userStore = defineStore("userPiniaStore", {
           }
         },
         async (error) => {
-          console.log(
-            "modifyUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
-            error.response.status
-          );
+          console.log("modifyUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error);
           this.isValidToken = false;
           this.tokenRegeneration();
         }
