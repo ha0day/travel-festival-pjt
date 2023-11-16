@@ -480,7 +480,7 @@ import HotPlaceZone from "@/components/HotPlaceZone.vue";
   position: relative;
   width: 800px;
   height: 50px;
-  margin: 10px auto;
+  margin: 20px auto;
 }
 
 input {
@@ -488,8 +488,8 @@ input {
   border-radius: 50px;
   width: 100%;
   height: 100%;
-  border: 2px solid;
-  font-size: 25px;
+  border: 3px solid;
+  font-size: 23px;
   padding-left: 9%;
 }
 
