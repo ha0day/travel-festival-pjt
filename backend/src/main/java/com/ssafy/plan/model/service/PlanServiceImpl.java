@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ssafy.plan.model.TagDto;
+import com.ssafy.plan.model.TagToPlanDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,16 @@ public class PlanServiceImpl implements PlanService {
 	@Override
 	@Transactional
 	public void writePlan(PlanDto planDto) throws Exception {
+		List<String> tagList = planDto.getTagList();
+		for(String tag: tagList){
+			planMapper.addTag(tag);
+			TagDto tagDto = planMapper.getTag(tag);
+			TagToPlanDto tagToPlanDto = new TagToPlanDto();
+			tagToPlanDto.setTagId(tagDto.getTagId());
+			tagToPlanDto.setPlanId(planDto.getPlanId());
+			planMapper.addTagToPlan(tagToPlanDto);
+		}
+
 		planMapper.writePlan(planDto);	
 	}
 

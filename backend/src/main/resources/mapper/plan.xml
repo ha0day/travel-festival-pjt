@@ -14,6 +14,11 @@
 		<result column="plan_detail" property="planDetail" />
 		<result column="img" property="img" />
 	</resultMap>
+
+	<resultMap type="tagDto" id="tag">
+		<result column="tag_id" property="tagId" />
+		<result column="tag_name" property="tagName" />
+	</resultMap>
  
 	<resultMap type="planDto" id="viewPlans" extends="plan">
 		<collection property="attrInfoList" column="plan_id"
@@ -84,6 +89,18 @@
 			select last_insert_id()
 		</selectKey>
 	</insert>
+
+	<insert id="addTag" parameterType="tagDto">
+		insert into Tag (tag_name)
+		values (#{tagName})
+	</insert>
+
+	<select id="getTag" parameterType="int" resultMap="viewPlans">
+		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail, img
+		from plan
+		where plan_id = #{planId}
+	</select>
+
 	
 	<update id="modifyPlan" parameterType="planDto">
 		update plan
