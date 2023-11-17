@@ -71,11 +71,7 @@
 		where plan_id = #{planId}
 	</select>
 	
-	<select id="findTag" parameterType="String" resultMap="tagDto">
-		select tag_id, tag_Name
-		from tag
-		where tag_name = #{tagName}
-	</select>
+
 	
 
   	<select id="getAttrInfoList" resultMap="attr">
@@ -127,11 +123,12 @@
 		where tag_name = #{tagName}
 	</select>
 	
-	<update id="raiseTagCount" parameterType="int">
+	
+ 	<update id="raiseTagCount" parameterType="int">
 		update tag
 		set tag_cnt = tag_cnt+1
 		where tag_id = #{tagId}
-	</update>
+	</update> 
 	
 	<update id="modifyPlan" parameterType="planDto">
 		update plan
