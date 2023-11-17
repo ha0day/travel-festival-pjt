@@ -1,7 +1,36 @@
 <script setup>
 import BoardTable from "@/components/BoardTable.vue";
-import AdsBody from "@/components/AdsBody.vue";
 import HotPlaceZone from "@/components/HotPlaceZone.vue";
+import { ref, onMounted } from "vue";
+import api from "axios";
+import { useRouter } from "vue-router";
+import { searchStore } from "@/stores/planListStore";
+const sstore = searchStore();
+
+const router = useRouter();
+const hotTags = ref({});
+const keyWord = ref("");
+const search = () => {
+  sstore.keyWord = keyWord;
+  sstore.isSearch = true;
+  router.push({ name: "planlist" });
+};
+
+const getHotTags = async () => {
+  await api
+    .get(`http://localhost:8090/trip/plan/hottag`)
+    .then(({ data }) => {
+      hotTags.value = data;
+      console.log("hotTags: " + hotTags);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+onMounted(() => {
+  getHotTags();
+});
 </script>
 
 <template>
@@ -9,8 +38,14 @@ import HotPlaceZone from "@/components/HotPlaceZone.vue";
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
     rel="stylesheet"
   />
-  <div class="search-mode">
-    <input type="text" class="form-control" placeholder="검색어를 입력하세요." />
+  <div class="search-mode mb-2">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="검색어를 입력하세요."
+      @keyup.enter="search(keyWord)"
+      v-model="keyWord"
+    />
     <i class="bi bi-search"></i>
 
     <div class="icon">
@@ -22,9 +57,99 @@ import HotPlaceZone from "@/components/HotPlaceZone.vue";
     </div>
   </div>
 
-  <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-    <ads-body></ads-body>
+  <div class="hot-tag mb-4 row" style="display: flex">
+    <div class="col-md-2" style="float: left; font-size: 18px"><b>인기 태그 :</b></div>
+    <div
+      class="col-md-2"
+      style="float: left; font-size: 18px; color: #0000cd"
+      v-for="(tag, index) in hotTags"
+      :key="index"
+    >
+      # {{ tag.tagName }}
+    </div>
   </div>
+
+  <!-- 케러셀 -->
+  <div class="mb-4 text-white rounded bg-dark pics">
+    <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="1"
+          aria-label="Slide 2"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="2"
+          aria-label="Slide 3"
+        ></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="1000">
+          <img
+            src="https://img.freepik.com/free-photo/female-tourists-on-hand-have-a-happy-travel-map_1150-7411.jpg?w=1380&t=st=1700116885~exp=1700117485~hmac=87071a92a3e2b4aa412e6e9d753ea9a6c0ce9d4629879ac640e88326f3cb8852"
+            class="d-block w-100"
+            alt="..."
+          />
+          <div class="carousel-caption d-none d-md-block">
+            <h5>First slide label</h5>
+            <p>Some representative placeholder content for the first slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="1000">
+          <img
+            src="https://a.travel-assets.com/findyours-php/viewfinder/images/res70/477000/477580-Osaka.jpg"
+            class="d-block w-100"
+            alt="..."
+          />
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Second slide label</h5>
+            <p>Some representative placeholder content for the second slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="1000">
+          <img
+            src="https://images.france.fr/zeaejvyq9bhj/2iAa84874gFOOKxspo7ssu/aa855e94895b7f1192c949bf8ef34fa5/kr_france_fr____________________-018.png?w=1120&h=490&q=70&fm=webp&fit=fill"
+            class="d-block w-100"
+            alt="..."
+          />
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Third slide label</h5>
+            <p>Some representative placeholder content for the third slide.</p>
+          </div>
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
   <div class="row g-5">
     <div class="col-md-12">
       <h3 class="pb-4 mb-4 fst-italic border-bottom">HOT Placeses TOP3</h3>
@@ -400,9 +525,17 @@ import HotPlaceZone from "@/components/HotPlaceZone.vue";
 
 .search-mode {
   position: relative;
-  width: 800px;
+  width: 750px;
   height: 50px;
-  margin: 10px auto;
+  margin: 20px auto;
+}
+.hot-tag {
+  position: relative;
+  width: 770px;
+  margin: 5px auto;
+  justify-content: flex-start;
+  padding-right: 40px;
+  padding-left: 40px;
 }
 
 input {
@@ -410,8 +543,8 @@ input {
   border-radius: 50px;
   width: 100%;
   height: 100%;
-  border: 2px solid;
-  font-size: 25px;
+  border: 3px solid;
+  font-size: 23px;
   padding-left: 9%;
 }
 
@@ -435,5 +568,11 @@ input {
 
 .plus-option i:nth-child(2) {
   color: #4f86ec;
+}
+
+/* 캐러셀 */
+.carousel-inner > .carousel-item > img {
+  width: 640px;
+  height: 400px;
 }
 </style>

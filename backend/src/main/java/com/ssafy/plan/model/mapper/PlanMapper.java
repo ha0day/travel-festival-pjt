@@ -4,10 +4,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.ssafy.plan.model.TagDto;
+import com.ssafy.plan.model.TagToPlanDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.plan.model.PlanDto;
 import com.ssafy.plan.model.PlanParamDto;
+import org.apache.ibatis.jdbc.SQL;
 
 @Mapper
 public interface PlanMapper {
@@ -18,4 +21,9 @@ public interface PlanMapper {
 	void modifyPlan(PlanDto planDto) throws SQLException;
 	void deletePlan(int planId) throws SQLException;
 
+	TagDto getTag(String tagName) throws SQLException;
+	void addTag(TagDto tagDto) throws SQLException;
+	void addTagToPlan(TagToPlanDto tagToPlanDto) throws SQLException;
+	void raiseTagCount(int tagId) throws SQLException;
+	List<TagDto> hotTagList() throws SQLException;
 }

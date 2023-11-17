@@ -11,6 +11,7 @@ const router = useRouter();
 const route = useRoute();
 const searchWord = ref("");
 const searchResult = ref([]);
+const tagContent = ref("");
 const plan = ref({
   userId: "JohnOh",
   planName: "",
@@ -18,11 +19,19 @@ const plan = ref({
   endDate: "",
   planDetail: "",
   attrInfo: [],
+  tagList: [],
   img: "https://img.freepik.com/free-photo/airplane_74190-464.jpg?w=1380&t=st=1699807779~exp=1699808379~hmac=aa5cc0c5c8e05a2a1437b84eec67fc7e174e450c93e37d6996ca134b2a9a4184",
 });
 
+const deleteTag = (tag) => {
+  var planFilter = [];
+  planFilter = plan.value.tagList.filter((t) => t != tag);
+  plan.value.tagList = planFilter;
+};
+
 const addPlace = (place) => {
   plan.value.attrInfo.push(place);
+<<<<<<< 30a34dc2682c09255caf3587fb6bcfdc9c69d2ba
   searchResult.value = [];
   console.log(plan.value.attrInfo);
 
@@ -31,6 +40,8 @@ const addPlace = (place) => {
 
 const markPlaceOnMap = (place) => {
   markPlace.value = place;
+=======
+>>>>>>> 710b2b359d1738f755d2994f2ae71f90e0703b13
 };
 
 const hasAttr = computed(() => {
@@ -41,6 +52,12 @@ const hasSearchResult = computed(() => {
   return searchResult.value.length > 0 ? true : false;
 });
 
+const addTag = () => {
+  plan.value.tagList.push({ tagName: tagContent.value });
+  tagContent.value = "";
+  // console.log("plan.tagList: " + JSON.stringify(plan.value.tagList));
+};
+
 const addPlan = async () => {
   await api
     .post(`http://localhost:8090/trip/plan/new`, {
@@ -49,6 +66,7 @@ const addPlan = async () => {
       startDate: plan.value.startDate,
       endDate: plan.value.endDate,
       planDetail: plan.value.planDetail,
+      tagList: plan.value.tagList,
       img: "https://img.freepik.com/free-photo/airplane_74190-464.jpg?w=1380&t=st=1699807779~exp=1699808379~hmac=aa5cc0c5c8e05a2a1437b84eec67fc7e174e450c93e37d6996ca134b2a9a4184",
     })
     .then(() => {
@@ -176,6 +194,7 @@ const searchAttraction = async () => {
               <VKakaoMapAdd :markPlace="markPlace" :selectedPlaces="selectedPlaces" />
               <div class="row g-5">
                 <div class="col-md-8">
+<<<<<<< 30a34dc2682c09255caf3587fb6bcfdc9c69d2ba
                   <!--  여행지 검색 -->
                   <div class="m-2 mb-3 row justify-content-center">
                     <div class="input-group justify-content-center mb-1">
@@ -237,6 +256,98 @@ const searchAttraction = async () => {
                           </ul>
                         </div>
                       </div>
+=======
+                  <h5 class="box-title">[ 제목 ]</h5>
+                  <input
+                    type="text"
+                    class="form-control mb-5 input-lg"
+                    id="planName"
+                    placeholder="제목을 입력하세요."
+                    v-model="plan.planName"
+                  />
+
+                  <h6 class="card-subtitle mx-auto d-block mb-3">[{{ plan.userId }}]님</h6>
+
+                  <input
+                    type="text"
+                    class="form-control mb-3"
+                    id="startDate"
+                    placeholder="시작날짜를 입력하세요."
+                    v-model="plan.startDate"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="endDate"
+                    placeholder="마지막날짜를 입력하세요."
+                    v-model="plan.endDDate"
+                  />
+
+                  <h5 class="box-title mt-5">[ 세부 내용 ]</h5>
+                  <textarea
+                    class="form-control"
+                    id="planDetail"
+                    rows="3"
+                    v-model="plan.planetail"
+                    placeholder="세부 내용을 입력하세요."
+                  ></textarea>
+                  <h5 class="box-title mt-3">[ 태그 ]</h5>
+                  <div class="input-group justify-content-center mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="태그를 검색하세요."
+                      aria-label="태그를 검색하세요."
+                      aria-describedby="button-addon2"
+                      v-model="tagContent"
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      id="addTag"
+                      @click="addTag()"
+                    >
+                      추가
+                    </button>
+                  </div>
+
+                  <div
+                    class="mb-4 row"
+                    style="float: left; justify-content: space-between; display: flex"
+                    v-for="(tag, index) in plan.tagList"
+                    :key="index"
+                  >
+                    <div class="col-md-12">
+                      <button
+                        type="button"
+                        class="btn btn-primary rounded-pill m-1"
+                        @click="deleteTag(tag)"
+                      >
+                        {{ tag.tagName }} <span class="badge">X</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 여행장소추가부분 -->
+
+              <div v-show="hasAttr" class="timeline">
+                <div class="timeline-row" v-for="(attr, index) in plan.attrInfo" :key="index">
+                  <div class="timeline-time">7:45PM<small>Dec 21</small></div>
+                  <div class="timeline-content">
+                    <i class="icon-attachment"></i>
+                    <h4>{{ attr.title }}</h4>
+                    <p>
+                      여기서는 무엇을 할것입니다. 첫번째 여행지의 세부내용입니다.여기서는 무엇을
+                      할것입니다. 첫번째 여행지의 세부내용입니다.여기서는 무엇을 할것입니다. 첫번째
+                      여행지의 세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의
+                      세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의
+                      세부내용입니다.여기서는 무엇을 할것입니다. 첫번째 여행지의 세부내용입니다.
+                    </p>
+                    <div class="thumbs">
+                      <img class="img-fluid rounded" :src="attr.firstImage" alt="Maxwell Admin" />
+>>>>>>> 710b2b359d1738f755d2994f2ae71f90e0703b13
                     </div>
                   </div>
                 </div>
