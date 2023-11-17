@@ -126,6 +126,12 @@ const loadMarkers = () => {
       { class: "title" },
       { textContent: position.title }
     );
+
+    const vname = makeHtmlElement(
+      "div",
+      { class: "name" },
+      { textContent: position.title }
+    );
     const vclose = makeHtmlElement("div", { class: "close" });
 
     const vbody = makeHtmlElement("div", { class: "body" });
@@ -146,15 +152,16 @@ const loadMarkers = () => {
       { class: "link" },
       { innerText: "네이버 검색" }
     );
-    vtitle.append(vclose);
+    // vtitle.append(vclose);
 
     vimg.append(iimg);
     vdiv.append(va);
+    vdesc.append(vname);
     vdesc.append(vdiv);
 
-    vbody.append(vimg, vdesc);
+    vbody.append(vimg, vclose, vdesc);
 
-    vinfo.append(vtitle, vbody);
+    vinfo.append(vbody);
 
     vwrap.append(vinfo);
 
@@ -218,9 +225,8 @@ const deleteMarkers = () => {
   position: absolute;
   left: 0;
   bottom: 40px;
-  width: 200px;
-  height: 132px;
-  margin-left: -97px;
+  height: 112px;
+  transform: translateX(-50%);
   text-align: left;
   overflow: hidden;
   font-size: 12px;
@@ -232,8 +238,8 @@ const deleteMarkers = () => {
   margin: 0;
 }
 .wrap .info {
-  width: 200px;
-  height: 120px;
+  width: fit-content;
+  height: 100px;
   border-radius: 5px;
   border-bottom: 2px solid #ccc;
   border-right: 1px solid #ccc;
@@ -252,13 +258,18 @@ const deleteMarkers = () => {
   font-size: 15px;
   font-weight: bold;
 }
+.info .name {
+  /* padding: 14px 10px 0 0; */
+  font-size: 15px;
+  font-weight: bold;
+}
 .info .close {
   position: absolute;
   top: 10px;
   right: 11px;
   color: #888;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png");
   background-size: contain;
 }
@@ -266,10 +277,12 @@ const deleteMarkers = () => {
   cursor: pointer;
 }
 .info .body {
+  height: 100%;
   position: relative;
   overflow: hidden;
 }
 .info .desc {
+  padding: 14px 14px 0 0;
   position: relative;
   margin: 13px 0 0 90px;
   height: 75px;
@@ -286,8 +299,8 @@ const deleteMarkers = () => {
 }
 .info .img {
   position: absolute;
-  top: 6px;
-  left: 5px;
+  top: 14%;
+  left: 10px;
   width: 73px;
   height: 71px;
   border: 1px solid #ddd;
