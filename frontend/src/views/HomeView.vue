@@ -1,25 +1,24 @@
 <script setup>
 import BoardTable from "@/components/BoardTable.vue";
 import HotPlaceZone from "@/components/HotPlaceZone.vue";
-import { ref } from "vue";
-const plan = ref({
-  tagList: [
-    {
-      tagName: "태그ONE",
-    },
-    {
-      tagName: "태그TWO",
-    },
-    {
-      tagName: "태그THREE",
-    },
-    {
-      tagName: "태그FOUR",
-    },
-    {
-      tagName: "태그FIVE",
-    },
-  ],
+import { ref, onMounted } from "vue";
+import api from "axios";
+
+const hotTags = ref({});
+const getHotTags = async () => {
+  await api
+    .get(`http://localhost:8090/trip/plan/hottag`)
+    .then(({ data }) => {
+      hotTags.value = data;
+      console.log("hotTags: " + hotTags);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+onMounted(() => {
+  getHotTags();
 });
 </script>
 
@@ -43,7 +42,7 @@ const plan = ref({
 
   <div class="hot-tag mb-4 row" style="display: flex">
     <div class="col-md-2">인기 태그:</div>
-    <div class="col-md-2" style="float: left" v-for="(tag, index) in plan.tagList" :key="index">
+    <div class="col-md-2" style="float: left" v-for="(tag, index) in hotTags" :key="index">
       # {{ tag.tagName }}
     </div>
   </div>
