@@ -65,7 +65,7 @@ const hasSearchResult = computed(() => {
 const addTag = () => {
   plan.value.tagList.push({ tagName: tagContent.value });
   tagContent.value = "";
-  // console.log("plan.tagList: " + JSON.stringify(plan.value.tagList));
+  tagSearchResult.value = "";
 };
 
 const addPlan = async () => {
@@ -142,31 +142,41 @@ const searchAttraction = async () => {
               <textarea class="form-control mb-5" id="planDetail" rows="3" v-model="plan.planDetail"
                 placeholder="세부 내용을 입력하세요."></textarea>
               <h5 class="box-title mt-3">[ 태그 ]</h5>
-              <div class="input-group justify-content-center mb-3">
+              <div class="justify-content-center mb-3">
+
+
+                <!-- <div class="overflow-scroll"> -->
                 <input type="text" class="form-control" placeholder="태그를 검색하세요." aria-label="태그를 검색하세요."
                   aria-describedby="button-addon2" v-model="tagContent" @keyup="searchTag()" />
-                <button class="btn btn-outline-secondary" type="button" id="addTag" @click="addTag()">
+                <!-- <button class="btn btn-outline-secondary" type="button" id="addTag" @click="addTag()">
                   추가
-                </button>
+                </button> -->
+                <div>
+                  <ul class="list-group" v-for="(tag, index) in tagSearchResult" :key="index">
+                    <li class="list-group-item" @click="addTag()">{{ tag.tagName }}</li>
+                  </ul>
+                </div>
+                <!-- </div> -->
+
               </div>
 
 
 
-            
 
-              <div class="overflow-scroll">.
-                <ul class="list-group" v-for="(tag,index) in tagSearchResult" :key="index">
-                  <li class="list-group-item">{{ tag.tagName }}</li>
-                </ul>
-              </div>
+              <!-- 
+                <div class="overflow-scroll">.
+                  <ul class="list-group" v-for="(tag,index) in tagSearchResult" :key="index">
+                    <li class="list-group-item">{{ tag.tagName }}</li>
+                  </ul>
+                </div> -->
 
 
 
               <div class="mb-4 row" style="
-                    float: left;
-                    justify-content: space-between;
-                    display: flex;
-                  " v-for="(tag, index) in plan.tagList" :key="index">
+                      float: left;
+                      justify-content: space-between;
+                      display: flex;
+                    " v-for="(tag, index) in plan.tagList" :key="index">
                 <div class="col-md-12">
                   <button type="button" class="btn btn-primary rounded-pill m-1" @click="deleteTag(tag)">
                     {{ tag.tagName }} <span class="badge">X</span>
