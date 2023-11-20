@@ -1,7 +1,21 @@
 <script setup>
 import { RouterLink } from "vue-router";
+import { searchStore } from "@/stores/planListStore";
 import { userStore } from "@/stores/userStore";
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const sstore = searchStore();
 const ustore = userStore();
+const logout = async () => {
+  await ustore.userLogout(ustore.userInfo.userId);
+  router.push({ path: "/" });
+};
+
+onMounted(() => {
+  sstore.isMy = false;
+});
 </script>
 
 <template>
@@ -47,7 +61,8 @@ const ustore = userStore();
               >
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/myplan">나의여행계획</a></li>
-                <li><a class="dropdown-item" href="/userInfo">회원정보</a></li>
+                <li><a class="dropdown-item" ef="/userInfo">회원정보</a></li>
+                <li><a class="dropdown-item" style="color: red" @click="logout">로그아웃</a></li>
               </ul>
             </div>
           </li>

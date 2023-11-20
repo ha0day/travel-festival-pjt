@@ -5,6 +5,8 @@ import { ko } from "date-fns/locale";
 import { useRouter } from "vue-router";
 import api from "axios";
 import VKakaoMapAdd from "@/components/common/VKakaoMapAdd.vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 // import Datepicker from 'vue3-datepicker';
 import { userStore } from "@/stores/userStore";
@@ -16,6 +18,7 @@ const router = useRouter();
 const searchWord = ref("");
 const searchResult = ref([]);
 const tagContent = ref("");
+const titleContent = ref("");
 const tagSearchResult = ref([]);
 const reload = ref(false);
 
@@ -104,43 +107,73 @@ const addTag = () => {
 };
 
 const addPlan = async () => {
-  await api
-    .post(`http://localhost:8090/trip/plan/new`, {
-      userId: "JohnOh",
-      planName: plan.value.planName,
-      startDate: getFormatDate(inputDate.value.start),
-      endDate: getFormatDate(inputDate.value.end),
-      planDetail: plan.value.planDetail,
-      tagList: plan.value.tagList,
-      attrInfoList: plan.value.attrInfo,
-      img: "https://img.freepik.com/free-photo/airplane_74190-464.jpg?w=1380&t=st=1699807779~exp=1699808379~hmac=aa5cc0c5c8e05a2a1437b84eec67fc7e174e450c93e37d6996ca134b2a9a4184",
-    })
-    .then(() => {
-      router.push({ path: "/myplan" });
-    })
-    .catch((e) => {
-      console.log(e);
+  if (titleContent.value.length === 0) {
+    toast.error("제목을 입력하세요", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1000,
     });
+  } else {
+    await api
+      .post(`http://localhost:8090/trip/plan/new`, {
+        userId: "JohnOh",
+        planName: plan.value.planName,
+        startDate: getFormatDate(inputDate.value.start),
+        endDate: getFormatDate(inputDate.value.end),
+        planDetail: plan.value.planDetail,
+        tagList: plan.value.tagList,
+        attrInfoList: plan.value.attrInfo,
+      img: "https://img.freepik.com/free-photo/airplane_74190-464.jpg?w=1380&t=st=1699807779~exp=1699808379~hmac=aa5cc0c5c8e05a2a1437b84eec67fc7e174e450c93e37d6996ca134b2a9a4184",
+      })
+      .then(() => {
+        router.push({ path: "/myplan" });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  const searchAttraction = async () => {
+    await api
+      .post(`http://localhost:8090/trip/attraction/search`, searchWord.value, {
+        headers: { "Content-Type": "application/text" },
+      })
+      .then(({ data }) => {
+        searchResult.value = data;
+        console.log(searchResult.value);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 };
 
-const searchAttraction = async () => {
+const onTagInput = (event) => {
+  tagContent.value = event.target.value;
+  searchTag();
+};
+
+const onTitleInput = (event) => {
+  titleContent.value = event.target.value;
+  console.log("제목길이: ", titleContent.value.length);
+};
+
+async function searchTag() {
   await api
-    .post(`http://localhost:8090/trip/attraction/search`, searchWord.value, {
-      headers: { "Content-Type": "application/text" },
-    })
+    .get(`http://localhost:8090/trip/plan/tag/${tagContent.value}`)
     .then(({ data }) => {
-      searchResult.value = data;
-      console.log(searchResult.value);
+      tagSearchResult.value = data;
     })
     .catch((e) => {
       console.log(e);
+      tagSearchResult.value = "";
     });
-};
+}
 </script>
 
 <template>
   <div class="row g-5">
     <div class="col-md-12">
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">내 마음대로 여행코스!!!</h3>
       <h3 class="pb-4 mb-4 fst-italic border-bottom">내 마음대로 여행코스!!!</h3>
       <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -185,11 +218,17 @@ const searchAttraction = async () => {
               <h4 class="box-title">[ 제목 ]</h4>
               <input
                 type="text"
-                class="form-control mb-5 input-lg"
+                class="form-control mb-1 input-lg"
                 id="planName"
                 placeholder="제목을 입력하세요."
                 v-model="plan.planName"
+                @input="onTitleInput($event)"
               />
+              <p v-show="titleContent.length === 0" class="error-message mb-4">
+                제목은 필수입니다.
+              </p>
+
+              <p v-show="titleContent.length != 0" class="error-message mb-4">&nbsp;</p>
 
               <h4 class="box-title">[ 날짜 ]</h4>
               <div class="input-group mb-3">
@@ -213,11 +252,17 @@ const searchAttraction = async () => {
                   placeholder="태그를 검색하세요."
                   aria-label="태그를 검색하세요."
                   aria-describedby="button-addon2"
-                  v-model="tagContent"
-                  @keyup="searchTag()"
+                  @input="onTagInput($event)"
                 />
 
                 <div>
+                  <ul
+                    v-if="tagSearchResult.length === 0 && tagContent.length != 0"
+                    class="list-group"
+                  >
+                    <li class="list-group-item" @click="addTag()">직접태그추가하기</li>
+                  </ul>
+
                   <ul class="list-group" v-for="(tag, index) in tagSearchResult" :key="index">
                     <li class="list-group-item" @click="addTag()">
                       {{ tag.tagName }}
@@ -341,6 +386,7 @@ const searchAttraction = async () => {
         <div class="col-md-12">
           <div v-show="hasAttr" class="timeline">
             <div class="timeline-row" v-for="(attr, index) in plan.attrInfo" :key="index">
+            <div class="timeline-row" v-for="(attr, index) in plan.attrInfo" :key="index">
               <div class="timeline-time">7:45PM<small>Dec 21</small></div>
               <div class="timeline-content">
                 <i class="icon-attachment"></i>
@@ -348,6 +394,7 @@ const searchAttraction = async () => {
                 <p>내용</p>
                 <!-- 사진 -->
                 <div class="thumbs">
+                  <img class="img-fluid rounded" :src="attr.firstImage" alt="Maxwell Admin" />
                   <img class="img-fluid rounded" :src="attr.firstImage" alt="Maxwell Admin" />
                 </div>
                 <div @click="deletePlace(index)">삭제</div>
@@ -377,6 +424,7 @@ const searchAttraction = async () => {
             <div class="modal-content">
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">추가하기</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">추가하기</h1>
                 <button
                   type="button"
                   class="btn-close"
@@ -386,6 +434,7 @@ const searchAttraction = async () => {
               </div>
               <div class="modal-body">정말 추가하시겠습니까?</div>
               <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                   아니요
                 </button>
@@ -663,5 +712,9 @@ body {
 
 div.date {
   display: inline-flex;
+}
+.error-message {
+  color: rgba(231, 78, 78, 0.829);
+  font-size: 14px;
 }
 </style>
