@@ -5,6 +5,8 @@ import { ko } from "date-fns/locale";
 import { useRouter } from "vue-router";
 import api from "axios";
 import VKakaoMapAdd from "@/components/common/VKakaoMapAdd.vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 // import Datepicker from 'vue3-datepicker';
 import { userStore } from "@/stores/userStore";
@@ -16,6 +18,7 @@ const router = useRouter();
 const searchWord = ref("");
 const searchResult = ref([]);
 const tagContent = ref("");
+const titleContent = ref("");
 const tagSearchResult = ref([]);
 const reload = ref(false);
 
@@ -81,45 +84,56 @@ const addTag = () => {
 };
 
 const addPlan = async () => {
-  await api
-    .post(`http://localhost:8090/trip/plan/new`, {
-      userId: "JohnOh",
-      planName: plan.value.planName,
-      startDate: getFormatDate(inputDate.value.start),
-      endDate: getFormatDate(inputDate.value.end),
-      planDetail: plan.value.planDetail,
-      tagList: plan.value.tagList,
-      img: "https://img.freepik.com/free-photo/airplane_74190-464.jpg?w=1380&t=st=1699807779~exp=1699808379~hmac=aa5cc0c5c8e05a2a1437b84eec67fc7e174e450c93e37d6996ca134b2a9a4184",
-    })
-    .then(() => {
-      router.push({ path: "/planlist" });
-    })
-    .catch((e) => {
-      console.log(e);
+  if (titleContent.value.length === 0) {
+    toast.error("제목을 입력하세요", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1000,
     });
+  } else {
+    await api
+      .post(`http://localhost:8090/trip/plan/new`, {
+        userId: "JohnOh",
+        planName: plan.value.planName,
+        startDate: getFormatDate(inputDate.value.start),
+        endDate: getFormatDate(inputDate.value.end),
+        planDetail: plan.value.planDetail,
+        tagList: plan.value.tagList,
+        img: "https://img.freepik.com/free-photo/airplane_74190-464.jpg?w=1380&t=st=1699807779~exp=1699808379~hmac=aa5cc0c5c8e05a2a1437b84eec67fc7e174e450c93e37d6996ca134b2a9a4184",
+      })
+      .then(() => {
+        router.push({ path: "/planlist" });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  const searchAttraction = async () => {
+    await api
+      .post(`http://localhost:8090/trip/attraction/search`, searchWord.value, {
+        headers: { "Content-Type": "application/text" },
+      })
+      .then(({ data }) => {
+        searchResult.value = data;
+        console.log(searchResult.value);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 };
 
-const searchAttraction = async () => {
-  await api
-    .post(`http://localhost:8090/trip/attraction/search`, searchWord.value, {
-      headers: { "Content-Type": "application/text" },
-    })
-    .then(({ data }) => {
-      searchResult.value = data;
-      console.log(searchResult.value);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-};
-
-const onInput = (event) => {
+const onTagInput = (event) => {
   tagContent.value = event.target.value;
-  console.log("입력된 값입니다: ", tagContent.value);
   searchTag();
 };
 
-const searchTag = async () => {
+const onTitleInput = (event) => {
+  titleContent.value = event.target.value;
+  console.log("제목길이: ", titleContent.value.length);
+};
+
+async function searchTag() {
   await api
     .get(`http://localhost:8090/trip/plan/tag/${tagContent.value}`)
     .then(({ data }) => {
@@ -129,7 +143,7 @@ const searchTag = async () => {
       console.log(e);
       tagSearchResult.value = "";
     });
-};
+}
 </script>
 
 <template>
@@ -179,11 +193,17 @@ const searchTag = async () => {
               <h4 class="box-title">[ 제목 ]</h4>
               <input
                 type="text"
-                class="form-control mb-5 input-lg"
+                class="form-control mb-1 input-lg"
                 id="planName"
                 placeholder="제목을 입력하세요."
                 v-model="plan.planName"
+                @input="onTitleInput($event)"
               />
+              <p v-show="titleContent.length === 0" class="error-message mb-4">
+                제목은 필수입니다.
+              </p>
+
+              <p v-show="titleContent.length != 0" class="error-message mb-4">&nbsp;</p>
 
               <h4 class="box-title">[ 날짜 ]</h4>
               <div class="input-group mb-3">
@@ -207,7 +227,7 @@ const searchTag = async () => {
                   placeholder="태그를 검색하세요."
                   aria-label="태그를 검색하세요."
                   aria-describedby="button-addon2"
-                  @input="onInput($event)"
+                  @input="onTagInput($event)"
                 />
 
                 <div>
@@ -658,5 +678,9 @@ body {
 
 div.date {
   display: inline-flex;
+}
+.error-message {
+  color: rgba(231, 78, 78, 0.829);
+  font-size: 14px;
 }
 </style>
