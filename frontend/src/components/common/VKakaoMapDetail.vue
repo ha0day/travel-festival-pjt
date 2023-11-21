@@ -4,20 +4,7 @@ var map;
 const positions = ref([]);
 const markers = ref([]);
 const lines = ref([]);
-const props = defineProps({ attractions: Array });
-
-// watch(
-//   () => props.selectAttraction.value,
-//   () => {
-//     // 이동할 위도 경도 위치를 생성합니다
-//     var moveLatLon = new kakao.maps.LatLng(props.selectAttraction.lat, props.selectAttraction.lng);
-
-//     // 지도 중심을 부드럽게 이동시킵니다
-//     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-//     map.panTo(moveLatLon);
-//   },
-//   { deep: true }
-// );
+const props = defineProps({ attractions: Array, reload: Boolean });
 
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
@@ -47,7 +34,10 @@ const initMap = () => {
   positions.value = [];
   props.attractions.forEach((attraction) => {
     let obj = {};
-    obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+    obj.latlng = new kakao.maps.LatLng(
+      attraction.latitude,
+      attraction.longitude
+    );
     obj.title = attraction.title;
     obj.firstImage = attraction.firstImage;
     positions.value.push(obj);
@@ -58,18 +48,21 @@ const initMap = () => {
   }
 };
 
+// //여행계획에 여행지 추가,삭제시 작동하는 watch
 // watch(
-//   () => props.attractions.value,
+//   () => props.attractions,
 //   () => {
-//     console.log("변경감지");
-//     console.log(props.attractions);
+//     console.log("2마커 어디감");
+//     positions.value = [];
 //     if (window.kakao && window.kakao.maps) {
-//       positions.value = [];
-//       props.attractions.forEach((attraction) => {
+//       props.attraction.forEach((attraction) => {
 //         let obj = {};
-//         obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+//         obj.latlng = new kakao.maps.LatLng(
+//           attraction.latitude,
+//           attraction.longitude
+//         );
 //         obj.title = attraction.title;
-//         obj.firstImage = attraction.firstImage;
+
 //         positions.value.push(obj);
 //       });
 //       loadMarkers();
@@ -78,6 +71,18 @@ const initMap = () => {
 //   },
 //   { deep: true }
 // );
+
+watch(
+  () => props.reload,
+  () => {
+    console.log("relayout하기@!");
+    if (window.kakao && window.kakao.maps) {
+      initMap();
+    }
+  },
+  { deep: true }
+);
+
 const loadLines = () => {
   lines.value = [];
 
@@ -120,7 +125,8 @@ const loadMarkers = () => {
   //deleteMarkers();
 
   // 마커 이미지를 생성합니다
-  const imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+  const imageSrc =
+    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
   // 마커이미지의 주소입니다
   const imageSize = new kakao.maps.Size(24, 35);
   const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
@@ -142,9 +148,17 @@ const loadMarkers = () => {
 
     const vwrap = makeHtmlElement("div", { class: "wrap" });
     const vinfo = makeHtmlElement("div", { class: "info" });
-    const vtitle = makeHtmlElement("div", { class: "title" }, { textContent: position.title });
+    const vtitle = makeHtmlElement(
+      "div",
+      { class: "title" },
+      { textContent: position.title }
+    );
 
-    const vname = makeHtmlElement("div", { class: "name" }, { textContent: position.title });
+    const vname = makeHtmlElement(
+      "div",
+      { class: "name" },
+      { textContent: position.title }
+    );
     const vclose = makeHtmlElement("div", { class: "close" });
 
     const vbody = makeHtmlElement("div", { class: "body" });

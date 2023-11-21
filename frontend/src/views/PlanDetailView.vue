@@ -4,7 +4,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import api from "axios";
 import PlanTimeLine from "../components/board/PlanTimeLine.vue";
-import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import VKakaoMapDetail from "@/components/common/VKakaoMapDetail.vue";
 import { searchStore } from "@/stores/planListStore";
 import { userStore } from "@/stores/userStore";
 
@@ -17,8 +17,8 @@ const planId = ref(route.params.id);
 const plan = ref({});
 const shared = ref("");
 const attractions = ref([]);
-
-const isMyPlan = sstore.isMy;
+const reload = ref(false);
+const isMyPlan = ref();
 
 const getDetail = async () => {
   await api
@@ -27,25 +27,16 @@ const getDetail = async () => {
       plan.value = data;
       attractions.value = plan.value.attrInfoList;
       shared.value = plan.value.shared;
+      isMyPlan.value = plan.value.userId == ustore.userInfo.userId;
+      reload.value = !reload.value;
     })
     .catch((e) => {
       console.log(e);
     });
 };
 
-// 수정
-const isEdit = ref(false);
-
 const editPlan = () => {
-  if (!isEdit.value) {
-    // 수정
-    isEdit.value = true;
-  } else {
-    // 완료
-    isEdit.value = false;
-    router.push();
-    getDetail();
-  }
+  router.push({ name: "editplan", params: { id: plan.planId } });
 };
 
 const deletePlan = async () => {
@@ -73,19 +64,27 @@ const shareMyPlan = async () => {
       console.log(e);
     });
 };
-
-getDetail();
+onMounted(() => {
+  reload.value = !reload.value;
+  getDetail();
+});
 </script>
 <template>
   <div class="row g-5">
     <div class="col-md-12">
-      <h3 class="pb-4 mb-4 fst-italic border-bottom">내 마음대로 여행코스!!!</h3>
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">
+        내 마음대로 여행코스!!!
+      </h3>
       <div class="row g-5">
         <div class="col-md-12">
           <div class="card shadow-sm">
             <div class="card-body">
               <div v-if="isMyPlan">
-                <button class="w-btn w-btn-blue" type="button" @click="shareMyPlan()">
+                <button
+                  class="w-btn w-btn-blue"
+                  type="button"
+                  @click="shareMyPlan()"
+                >
                   <div v-if="shared == 0">공유하기</div>
                   <div v-if="shared == 1">공유 취소하기</div>
                 </button>
@@ -104,11 +103,15 @@ getDetail();
                     {{ plan.planName }}
                   </h2>
 
-                  <h6 class="card-subtitle mx-auto d-block mb-3">[{{ plan.userId }}]님</h6>
+                  <h6 class="card-subtitle mx-auto d-block mb-3">
+                    [{{ plan.userId }}]님
+                  </h6>
                   <figcaption class="blockquote-footer mt-3">
                     시작일: {{ plan.startDate }}
                   </figcaption>
-                  <figcaption class="blockquote-footer">마지막일: {{ plan.endDate }}</figcaption>
+                  <figcaption class="blockquote-footer">
+                    마지막일: {{ plan.endDate }}
+                  </figcaption>
                   <h4 class="box-title mt-5">[ 세부 내용 ]</h4>
                   <p class="card-text mb-5">
                     {{ plan.planDetail }}
@@ -117,12 +120,19 @@ getDetail();
                   <h4>[ 태그 ]</h4>
                   <div
                     class="mb-4 row"
-                    style="float: left; justify-content: space-between; display: flex"
+                    style="
+                      float: left;
+                      justify-content: space-between;
+                      display: flex;
+                    "
                     v-for="(tag, index) in plan.tagList"
                     :key="index"
                   >
                     <div class="col-md-12">
-                      <button type="button" class="btn btn-primary rounded-pill m-1">
+                      <button
+                        type="button"
+                        class="btn btn-primary rounded-pill m-1"
+                      >
                         # {{ tag.tagName }}
                       </button>
                     </div>
@@ -133,34 +143,24 @@ getDetail();
               <div class="row g-3">
                 <div class="col-md-8">
                   <h5>지도</h5>
-                  <VKakaoMap :attractions="attractions" />
+                  <VKakaoMapDetail :attractions="attractions" />
                 </div>
 
                 <div class="col-md-4">
                   <h5>타임라인</h5>
-                  <plan-time-line :attractions="attractions" />
+                  <plan-time-line :attractions="attractions" isDetail="true" />
                 </div>
               </div>
 
               <div class="m-2 p-1 row justify-content-end">
                 <div v-if="isMyPlan">
-                  <a
+                  <button
                     href="#"
-                    v-if="!isEdit"
                     @click="editPlan()"
                     type="button"
                     class="btn btn-primary float-right m-2 col-1"
                   >
                     수정
-                  </a>
-                  <button
-                    v-else
-                    type="button"
-                    class="btn btn-primary float-right m-2 col-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editModal"
-                  >
-                    완료
                   </button>
 
                   <button
@@ -171,44 +171,6 @@ getDetail();
                   >
                     삭제
                   </button>
-                </div>
-              </div>
-
-              <!-- Edit Modal -->
-              <div
-                class="modal fade"
-                id="editModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">수정하기</h1>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">정말 수정하시겠습니까?</div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        아니요
-                      </button>
-                      <a
-                        href="#"
-                        type="button"
-                        class="btn btn-primary"
-                        @click="editPlan()"
-                        data-bs-dismiss="modal"
-                      >
-                        네
-                      </a>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -223,7 +185,9 @@ getDetail();
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">삭제하기</h1>
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        삭제하기
+                      </h1>
                       <button
                         type="button"
                         class="btn-close"
@@ -233,7 +197,11 @@ getDetail();
                     </div>
                     <div class="modal-body">정말 삭제하시겠습니까?</div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
                         아니요
                       </button>
                       <button

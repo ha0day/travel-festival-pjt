@@ -1,17 +1,34 @@
 <script setup>
 import { defineProps } from "vue";
-defineProps(["attractions"]);
+const props = defineProps({
+  attractions: Array,
+  isDetail: String,
+});
+const emit = defineEmits(["deletePlace"]);
+
+const deletePlace = function (index) {
+  emit("deletePlace", index);
+};
 </script>
 
 <template>
-  <div id="timescroll" class="overflow-y-scroll h-100 rounded-2 timeline" style="max-height: 800px">
+  <div
+    id="timescroll"
+    class="overflow-y-scroll h-100 rounded-2 timeline"
+    style="max-height: 800px"
+  >
     <div class="timeline-row" v-for="(attr, index) in attractions" :key="index">
       <div class="timeline-content">
         <div class="time-title">{{ attr.title }}</div>
         <!-- 사진 -->
         <div class="thumbs">
-          <img class="img-fluid rounded" :src="attr.firstImage" alt="Maxwell Admin" />
+          <img
+            class="img-fluid rounded"
+            :src="attr.firstImage"
+            alt="Maxwell Admin"
+          />
         </div>
+        <div v-if="isDetail == 'false'" @click="deletePlace(index)">삭제</div>
       </div>
     </div>
   </div>

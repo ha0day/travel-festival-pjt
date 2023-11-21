@@ -4,7 +4,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import api from "axios";
 import PlanTimeLine from "../components/board/PlanTimeLine.vue";
-import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import VKakaoMapEdit from "@/components/common/VKakaoMapEdit.vue";
 import { searchStore } from "@/stores/planListStore";
 import { userStore } from "@/stores/userStore";
 
@@ -12,108 +12,135 @@ const sstore = searchStore();
 const ustore = userStore();
 const router = useRouter();
 const route = useRoute();
-
+const searchWord = ref("");
+const searchResult = ref([]);
+const markPlace = ref({});
 const planId = ref(route.params.id);
 const plan = ref({});
-const shared = ref("");
-const attractions = ref([]);
-const planNameEdit = ref("");
-const planDetailEdit = ref(""); // 변경된 데이터
-const startDateEdit = ref(""); // 변경된 데이터
-const endDateEdit = ref(""); // 변경된 데이터
+const planName = ref("");
+const planDetail = ref("");
+const startDate = ref("");
+const endDate = ref("");
+const attrInfoList = ref([]);
+const tagList = ref([]);
 
 const isMyPlan = sstore.isMy;
 
-// 수정
-const isEdit = ref(false);
-const editPlan = () => {
-  if (!isEdit.value) {
-    // 수정
-    isEdit.value = true;
-    planNameEdit.value = plan.value.planName;
-    planDetailEdit.value = plan.value.planDetail;
-    startDateEdit.value = plan.value.startDate;
-    endDateEdit.value = plan.value.endDate;
-  } else {
-    // 완료
-    isEdit.value = false;
-    editDetail();
-  }
+const tagContent = ref("");
+const tagSearchResult = ref([]);
+
+const addPlace = (place) => {
+  attrInfoList.value.push(place);
+  searchResult.value = [];
+  console.log(plan.value.attrInfo);
 };
 
-const editDetail = async () => {
+const markPlaceOnMap = (place) => {
+  markPlace.value = place;
+};
+
+const deletePlace = function (index) {
+  attrInfoList.value.splice(index, 1);
+};
+
+const searchAttraction = async () => {
+  await api
+    .post(
+      `${import.meta.env.VITE_VUE_API_URL}/attraction/search`,
+      searchWord.value,
+      {
+        headers: { "Content-Type": "application/text" },
+      }
+    )
+    .then(({ data }) => {
+      searchResult.value = data;
+      console.log(searchResult.value);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+const hasSearchResult = computed(() => {
+  return searchResult.value.length > 0 ? true : false;
+});
+const deleteTag = (tag) => {
+  var planFilter = [];
+  planFilter = tagList.value.filter((t) => t != tag);
+  tagList.value = planFilter;
+};
+
+const addTag = () => {
+  plan.value.tagList.push({ tagName: tagContent.value });
+  tagContent.value = "";
+  tagSearchResult.value = "";
+};
+
+const onTagInput = (event) => {
+  tagContent.value = event.target.value;
+  searchTag();
+};
+
+async function searchTag() {
+  await api
+    .get(`${import.meta.env.VITE_VUE_API_URL}/plan/tag/${tagContent.value}`)
+    .then(({ data }) => {
+      tagSearchResult.value = data;
+    })
+    .catch((e) => {
+      console.log(e);
+      tagSearchResult.value = "";
+    });
+}
+
+// 수정
+const editPlan = async () => {
   await api
     .put(`${import.meta.env.VITE_VUE_API_URL}/plan`, {
       planId: planId.value,
-      planName: planNameEdit.value,
-      startDate: startDateEdit.value,
-      endDate: endDateEdit.value,
-      planDetail: planDetailEdit.value,
+      planName: planName.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+      planDetail: planDetail.value,
+      attrInfoList: attrInfoList.value,
+      tagList: tagList.value,
     })
     .then(() => {
-      getDetail();
+      router.push({ name: "plandetail", params: { id: plan.planId } });
     })
     .catch((e) => {
       console.log(e);
     });
 };
 
-const getDetail = async () => {
+const initInfo = async () => {
   await api
     .get(`${import.meta.env.VITE_VUE_API_URL}/plan/${planId.value}`)
     .then(({ data }) => {
       plan.value = data;
-      attractions.value = plan.value.attrInfoList;
-      shared.value = plan.value.shared;
+      planName.value = plan.value.planName;
+      startDate.value = plan.value.startDate;
+      endDate.value = plan.value.endDate;
+      planDetail.value = plan.value.planDetail;
+      tagList.value = plan.value.tagList;
+      attrInfoList.value = plan.value.attrInfoList;
     })
     .catch((e) => {
       console.log(e);
     });
 };
 
-const deletePlan = async () => {
-  await api
-    .delete(`${import.meta.env.VITE_VUE_API_URL}/plan/${planId.value}`)
-    .then(() => {
-      router.push({ path: "/planlist", params: { planId: planId } });
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-};
-
-const shareMyPlan = async () => {
-  await api
-    .put(`${import.meta.env.VITE_VUE_API_URL}/plan/${planId.value}`, {
-      planId: planId.value,
-    })
-    .then(({ data }) => {
-      shared.value = data;
-      console.log("shared 값 ");
-      console.log(shared.value);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-};
-
-getDetail();
+onMounted(() => {
+  initInfo();
+});
 </script>
 <template>
   <div class="row g-5">
     <div class="col-md-12">
-      <h3 class="pb-4 mb-4 fst-italic border-bottom">내 마음대로 여행코스!!!</h3>
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">여행계획 수정하기</h3>
       <div class="row g-5">
         <div class="col-md-12">
           <div class="card shadow-sm">
             <div class="card-body">
-              <div v-if="isMyPlan">
-                <button class="w-btn w-btn-blue" type="button" @click="shareMyPlan()">
-                  <div v-if="shared == 0">공유하기</div>
-                  <div v-if="shared == 1">공유 취소하기</div>
-                </button>
-              </div>
-
               <div class="row g-5">
                 <div class="col-md-4">
                   <img
@@ -123,66 +150,113 @@ getDetail();
                   />
                 </div>
                 <div class="col-md-8">
-                  <h2 v-if="!isEdit" class="card-title mx-auto d-block mt-1 mb-2">
-                    {{ plan.planName }}
-                  </h2>
+                  <h5>여행 이름</h5>
                   <input
-                    v-if="isEdit"
                     type="text"
-                    class="form-control"
+                    class="form-control mb-2"
                     id="planName"
-                    :placeholder="planNameEdit"
-                    v-model="planNameEdit"
+                    :placeholder="planName"
+                    v-model="planName"
                   />
-
-                  <h6 class="card-subtitle mx-auto d-block mb-3">[{{ plan.userId }}]님</h6>
-                  <figcaption v-if="!isEdit" class="blockquote-footer mt-3">
-                    시작일: {{ plan.startDate }}
-                  </figcaption>
+                  <h5>시작일</h5>
                   <div>
                     <input
-                      v-if="isEdit"
                       type="text"
-                      class="form-control"
+                      class="form-control mb-2"
                       id="startDate"
-                      :placeholder="startDateEdit"
-                      v-model="startDateEdit"
+                      :placeholder="startDate"
+                      v-model="startDate"
                     />
                   </div>
-                  <figcaption v-if="!isEdit" class="blockquote-footer">
-                    마지막일: {{ plan.endDate }}
-                  </figcaption>
+                  <h5>마지막일</h5>
                   <input
-                    v-else
                     type="text"
-                    class="form-control"
+                    class="form-control mb-2"
                     id="endDate"
-                    :placeholder="endDateEdit"
-                    v-model="endDateEdit"
+                    :placeholder="endDate"
+                    v-model="endDate"
                   />
-                  <h4 class="box-title mt-5">[ 세부 내용 ]</h4>
-                  <p v-if="!isEdit" class="card-text mb-5">
-                    {{ plan.planDetail }}
-                  </p>
+                  <h5>세부내용</h5>
                   <textarea
-                    v-if="isEdit"
-                    class="form-control mb-5"
+                    class="form-control mb-2"
                     id="planDetail"
                     rows="3"
-                    :placeholder="planDetailEdit"
-                    v-model="planDetailEdit"
+                    :placeholder="planDetail"
+                    v-model="planDetail"
                   ></textarea>
-
-                  <h4>[ 태그 ]</h4>
+                  <!-- <h4>[ 태그 ]</h4>
                   <div
                     class="mb-4 row"
-                    style="float: left; justify-content: space-between; display: flex"
-                    v-for="(tag, index) in plan.tagList"
+                    style="
+                      float: left;
+                      justify-content: space-between;
+                      display: flex;
+                    "
+                    v-for="(tag, index) in tagList"
                     :key="index"
                   >
                     <div class="col-md-12">
-                      <button type="button" class="btn btn-primary rounded-pill m-1">
+                      <button
+                        type="button"
+                        class="btn btn-primary rounded-pill m-1"
+                      >
                         # {{ tag.tagName }}
+                      </button>
+                    </div>
+                  </div> -->
+                  <h5>태그</h5>
+                  <div class="justify-content-center mb-3">
+                    <!-- <div class="overflow-scroll"> -->
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="태그를 검색하세요."
+                      aria-label="태그를 검색하세요."
+                      aria-describedby="button-addon2"
+                      @input="onTagInput($event)"
+                    />
+
+                    <div>
+                      <ul
+                        v-if="
+                          tagSearchResult.length === 0 && tagContent.length != 0
+                        "
+                        class="list-group"
+                      >
+                        <li class="list-group-item" @click="addTag()">
+                          직접 태그 추가하기
+                        </li>
+                      </ul>
+
+                      <ul
+                        class="list-group"
+                        v-for="(tag, index) in tagSearchResult"
+                        :key="index"
+                      >
+                        <li class="list-group-item" @click="addTag()">
+                          {{ tag.tagName }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div
+                    class="mb-4 row"
+                    style="
+                      float: left;
+                      justify-content: space-between;
+                      display: flex;
+                    "
+                    v-for="(tag, index) in tagList"
+                    :key="index"
+                  >
+                    <div class="col-md-12">
+                      <button
+                        type="button"
+                        class="btn btn-primary rounded-pill m-1"
+                        @click="deleteTag(tag)"
+                      >
+                        {{ tag.tagName }} <span class="badge">X</span>
                       </button>
                     </div>
                   </div>
@@ -190,47 +264,94 @@ getDetail();
               </div>
 
               <div class="row g-3">
-                <div class="col-md-8">
+                <div class="col-md-3">
+                  <!--  여행지 검색 -->
+                  <h5>여행지 검색</h5>
+                  <!-- class="m-2 mb-3 row justify-content-center" -->
+                  <div class="input-group justify-content-center">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="장소를 검색하세요."
+                      aria-label="장소를 검색하세요."
+                      aria-describedby="button-addon2"
+                      v-model="searchWord"
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      id="button-addon2"
+                      @click="searchAttraction()"
+                    >
+                      검색
+                    </button>
+                  </div>
+
+                  <div class="justify-content-center">
+                    <div
+                      id="searchResult"
+                      v-show="hasSearchResult"
+                      class="overflow-y-scroll h-100 bg-body-tertiary p-2 rounded-2"
+                      style="max-height: 800px"
+                    >
+                      <ul
+                        class="list-group"
+                        v-for="(place, index) in searchResult"
+                        :key="index"
+                      >
+                        <a
+                          @click="markPlaceOnMap(place)"
+                          class="list-group-item list-group-item-action"
+                          aria-current="true"
+                        >
+                          <div class="row g-2">
+                            <!-- <div class="col-md-8"> -->
+                            <div>
+                              <div class="time-title">{{ place.title }}</div>
+                              <div>{{ place.addr1 }}</div>
+                            </div>
+                            <!-- </div> -->
+                            <!-- <div class="col-md-4 align-items-center"> -->
+                            <div @click="addPlace(place)" aria-current="true">
+                              <div class="align-middle blue">
+                                여행계획에 추가
+                              </div>
+                            </div>
+                            <!-- </div> -->
+                          </div>
+                        </a>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
                   <h5>지도</h5>
-                  <VKakaoMap :attractions="attractions" />
+                  <VKakaoMapEdit
+                    :markPlace="markPlace"
+                    :addedPlaces="attrInfoList"
+                    style="width: 100%"
+                  />
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                   <h5>타임라인</h5>
-                  <plan-time-line :attractions="attractions" />
+                  <plan-time-line
+                    @delete-place="deletePlace"
+                    :attractions="attrInfoList"
+                    isDetail="false"
+                  />
                 </div>
               </div>
 
               <div class="m-2 p-1 row justify-content-end">
-                <div v-if="isMyPlan">
-                  <a
-                    href="#"
-                    v-if="!isEdit"
-                    @click="editPlan()"
-                    type="button"
-                    class="btn btn-primary float-right m-2 col-1"
-                  >
-                    수정
-                  </a>
-                  <button
-                    v-else
-                    type="button"
-                    class="btn btn-primary float-right m-2 col-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editModal"
-                  >
-                    완료
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-danger float-right m-2 col-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteModal"
-                  >
-                    삭제
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  class="btn btn-primary float-right m-2 col-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editModal"
+                >
+                  완료
+                </button>
               </div>
 
               <!-- Edit Modal -->
@@ -244,7 +365,9 @@ getDetail();
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">수정하기</h1>
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        수정하기
+                      </h1>
                       <button
                         type="button"
                         class="btn-close"
@@ -254,7 +377,11 @@ getDetail();
                     </div>
                     <div class="modal-body">정말 수정하시겠습니까?</div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
                         아니요
                       </button>
                       <a
@@ -266,43 +393,6 @@ getDetail();
                       >
                         네
                       </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Delete Modal -->
-              <div
-                class="modal fade"
-                id="deleteModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">삭제하기</h1>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">정말 삭제하시겠습니까?</div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        아니요
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        @click="deletePlan()"
-                        data-bs-dismiss="modal"
-                      >
-                        네
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -321,7 +411,10 @@ body {
   color: #bcd0f7;
   background: #1a233a;
 }
-
+.blue {
+  color: blue;
+  text-decoration: underline;
+}
 .w-btn {
   position: relative;
   border: none;
