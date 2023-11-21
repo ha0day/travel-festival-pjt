@@ -97,7 +97,6 @@ const loadMarkers = () => {
 
   for (var i = 0; i < positions.value.length; i++) {
     var linePath;
-    //var lineLine = new kakao.maps.Polyline();
     const position = positions.value[i];
     const marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도

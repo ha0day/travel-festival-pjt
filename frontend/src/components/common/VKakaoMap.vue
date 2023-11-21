@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from "vue";
 var map;
 const positions = ref([]);
 const markers = ref([]);
+const lines = ref([]);
 const props = defineProps({ attractions: Array });
 
 // watch(
@@ -46,41 +47,60 @@ const initMap = () => {
   positions.value = [];
   props.attractions.forEach((attraction) => {
     let obj = {};
-    obj.latlng = new kakao.maps.LatLng(
-      attraction.latitude,
-      attraction.longitude
-    );
+    obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
     obj.title = attraction.title;
     obj.firstImage = attraction.firstImage;
     positions.value.push(obj);
   });
   if (positions.value.length !== 0) {
     loadMarkers();
+    loadLines();
   }
 };
 
-watch(
-  () => props.attractions.value,
-  () => {
-    console.log("변경감지");
-    console.log(props.attractions);
-    if (window.kakao && window.kakao.maps) {
-      positions.value = [];
-      props.attractions.forEach((attraction) => {
-        let obj = {};
-        obj.latlng = new kakao.maps.LatLng(
-          attraction.latitude,
-          attraction.longitude
-        );
-        obj.title = attraction.title;
-        obj.firstImage = attraction.firstImage;
-        positions.value.push(obj);
-      });
-      loadMarkers();
+// watch(
+//   () => props.attractions.value,
+//   () => {
+//     console.log("변경감지");
+//     console.log(props.attractions);
+//     if (window.kakao && window.kakao.maps) {
+//       positions.value = [];
+//       props.attractions.forEach((attraction) => {
+//         let obj = {};
+//         obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+//         obj.title = attraction.title;
+//         obj.firstImage = attraction.firstImage;
+//         positions.value.push(obj);
+//       });
+//       loadMarkers();
+//       loadLines();
+//     }
+//   },
+//   { deep: true }
+// );
+const loadLines = () => {
+  lines.value = [];
+
+  for (var i = 0; i < positions.value.length; i++) {
+    var linePath;
+    const position = positions.value[i];
+
+    if (i != 0) {
+      linePath = [positions.value[i - 1].latlng, positions.value[i].latlng];
     }
-  },
-  { deep: true }
-);
+
+    var drawLine = new kakao.maps.Polyline({
+      map: map,
+      path: linePath,
+      strokeWeight: 2,
+      strokeColor: "#db4040",
+      strokeOpacity: 1,
+      strokeStyle: "solid",
+    });
+    drawLine.setMap(map);
+    lines.value.push(drawLine);
+  }
+};
 
 const makeHtmlElement = function (tagName, ...attr) {
   const element = document.createElement(tagName);
@@ -97,23 +117,24 @@ const makeHtmlElement = function (tagName, ...attr) {
 
 const loadMarkers = () => {
   // 현재 표시되어있는 marker들이 있다면 map에 등록된 marker를 제거한다.
-  deleteMarkers();
+  //deleteMarkers();
 
   // 마커 이미지를 생성합니다
-  //   const imgSrc = require("@/assets/map/markerStar.png");
-  // 마커 이미지의 이미지 크기 입니다
-  //   const imgSize = new kakao.maps.Size(24, 35);
-  //   const markerImage = new kakao.maps.MarkerImage(imgSrc, imgSize);
+  const imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+  // 마커이미지의 주소입니다
+  const imageSize = new kakao.maps.Size(24, 35);
+  const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
   // 마커를 생성합니다
   markers.value = [];
+
   positions.value.forEach((position) => {
     const marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도
       position: position.latlng, // 마커를 표시할 위치
       title: position.title, // 마커의 타이틀
       clickable: true, // // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-      // image: markerImage, // 마커의 이미지
+      image: markerImage, // 마커의 이미지
     });
 
     // content HTMLElement 생성
@@ -121,17 +142,9 @@ const loadMarkers = () => {
 
     const vwrap = makeHtmlElement("div", { class: "wrap" });
     const vinfo = makeHtmlElement("div", { class: "info" });
-    const vtitle = makeHtmlElement(
-      "div",
-      { class: "title" },
-      { textContent: position.title }
-    );
+    const vtitle = makeHtmlElement("div", { class: "title" }, { textContent: position.title });
 
-    const vname = makeHtmlElement(
-      "div",
-      { class: "name" },
-      { textContent: position.title }
-    );
+    const vname = makeHtmlElement("div", { class: "name" }, { textContent: position.title });
     const vclose = makeHtmlElement("div", { class: "close" });
 
     const vbody = makeHtmlElement("div", { class: "body" });
