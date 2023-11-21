@@ -14,6 +14,7 @@
 		<result column="plan_detail" property="planDetail" />
 		<result column="img" property="img" />
 		<result column="shared" property="shared" />
+		<result column="isfavorite" property="isFavorite" />
 	</resultMap>
 
 	<resultMap type="tagDto" id="tag">
@@ -55,6 +56,7 @@
 
 	<sql id="search">
 		<if test='word !=null'>
+<<<<<<< backend/src/main/resources/mapper/plan.xml
 			where plan_name like concat('%', #{word}, '%')
 			or plan_detail
 			like concat('%', #{word}, '%')
@@ -70,8 +72,32 @@
 		resultMap="plan">
 		select plan_id, user_id, plan_name, start_date, end_date, reg_date,
 		plan_detail, img, shared
+=======
+			where p.plan_name like concat('%', #{word}, '%')
+			or p.plan_detail like concat('%', #{word}, '%')
+			or p.plan_id in (select ttp.plan_id
+				from tag_to_plan ttp join tag t
+				on ttp.tag_id = t.tag_id
+				where t.tag_name like concat('%', #{word}, '%')
+				)
+		</if>
+	</sql>
+
+	<!-- <select id="planList" parameterType="planParamDto" resultMap="plan">
+		select plan_id, user_id, plan_name, start_date, end_date, reg_date, plan_detail, img
+>>>>>>> backend/src/main/resources/mapper/plan.xml
 		from plan
 		<include refid="search"></include>
+		limit #{start}, #{listsize}
+	</select> -->
+	
+	<select id="planList" parameterType="planParamDto" resultMap="plan">
+		select p.plan_id, p.user_id, p.plan_name, p.start_date, p.end_date, p.reg_date, p.plan_detail, p.img, if(f.user_id = "Johnohwb", true, false) as isfavorite
+		from plan p left join favorite f
+		on p.plan_id = f.plan_id
+		<include refid="search"></include>
+		group by p.plan_id, f.user_id;
+		
 		<!-- limit #{start}, #{listsize} -->
 	</select>
 
@@ -193,7 +219,12 @@
 		insert into favorite
 		(user_id, plan_id)
 		values (#{userId}, #{planId})
+<<<<<<< backend/src/main/resources/mapper/plan.xml
 	</insert>
+=======
+	</insert> 
+	
+>>>>>>> backend/src/main/resources/mapper/plan.xml
 	<delete id="cancelFavorite" parameterType="favoriteDto">
 		delete from favorite
 		where user_id=#{userId} and plan_id=#{planId}

@@ -33,6 +33,17 @@ public class PlanDto {
 	@ApiModelProperty(value = "공유 여부")
 	private int shared;
 
+	@ApiModelProperty(value = "여행명소 리스트")
+	private Boolean isFavorite;
+
+	public Boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(Boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
+
 	public void setTagList(List<TagDto> tagList) {
 		this.tagList = tagList;
 	}
