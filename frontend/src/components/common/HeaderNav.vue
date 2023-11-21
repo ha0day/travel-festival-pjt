@@ -61,7 +61,7 @@ onMounted(() => {
               >
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/myplan">나의여행계획</a></li>
-                <li><a class="dropdown-item" ef="/userInfo">회원정보</a></li>
+                <li><a class="dropdown-item" href="/userInfo">회원정보</a></li>
                 <li><a class="dropdown-item" style="color: red" @click="logout">로그아웃</a></li>
               </ul>
             </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive } from "vue";
+import { reactive } from "vue";
 import { userStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
@@ -19,6 +19,11 @@ const user = reactive({
 const error = reactive({
   message: "",
 });
+
+const register = () => {
+  router.push({ name: "register" });
+};
+
 function updateData(data, key) {
   console.log(click);
   user[key] = data;
@@ -161,7 +166,15 @@ async function signIn() {
       />
       <label class="form-check-label" for="flexCheckDefault"> 아이디 저장 </label>
     </div>
-    <button class="btn btn-primary w-100 py-2" type="submit" @click="signIn()">로그인</button>
+
+    <div class="row g-3">
+      <div class="col-sm-6">
+        <button class="btn btn-primary w-100 py-2" type="submit" @click="signIn()">로그인</button>
+      </div>
+      <div class="col-sm-6">
+        <button class="btn btn-primary w-100 py-2" type="submit" @click="register">회원가입</button>
+      </div>
+    </div>
   </form>
 </template>
 
