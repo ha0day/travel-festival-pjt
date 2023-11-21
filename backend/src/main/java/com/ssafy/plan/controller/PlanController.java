@@ -73,7 +73,6 @@ public class PlanController {
 		}
 	}
 
-
 	@ApiOperation(value = "태그 검색", notes = "<big> 태그검색결과</big>을 반환해 줍니다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "태그검색결과 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
 			@ApiResponse(code = 500, message = "서버에러!!") })
@@ -95,7 +94,7 @@ public class PlanController {
 	@ApiOperation(value = "인기 태그", notes = "<big>인기 태그 5개</big>를 반환해 줍니다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "인기 태그 목록 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
 			@ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping(value="/hottag")
+	@GetMapping(value = "/hottag")
 	public ResponseEntity<?> hotTagList() {
 		logger.debug("hotTagList call");
 		try {
@@ -122,7 +121,21 @@ public class PlanController {
 			return new ResponseEntity<ResultDto>(new ResultDto("fail", "NO ARTICLE"), HttpStatus.OK);
 		}
 	}
-	
+
+	@ApiOperation(value = "여행계획 공유", notes = "여행계획 공유 FLAG를 변경합니다.")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "planId", value = "글 번호", required = true, dataType = "int", paramType = "path") })
+	@PutMapping(value = "/{planId}")
+	public ResponseEntity<?> shareMyPlan(@PathVariable("planId") int planId) {
+		logger.debug("shareMyPlan planId : {}", planId);
+		try {
+			int shared = planService.shareMyPlan(planId);
+			return new ResponseEntity<Integer>(shared, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<ResultDto>(new ResultDto("fail", "공유여부 변경 실패"), HttpStatus.OK);
+		}
+	}
 
 	@ApiOperation(value = "여행계획 추가", notes = "여행계획을 추가합니다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "여행계획 추가 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
@@ -130,7 +143,7 @@ public class PlanController {
 	@PostMapping(value = "/new")
 	public ResponseEntity<?> writePlan(@RequestBody PlanDto planDto) {
 		logger.debug("writePlan call");
-		logger.debug("시작날짜: "+planDto.getStartDate());
+		logger.debug("시작날짜: " + planDto.getStartDate());
 
 		System.out.println(planDto.getStartDate());
 		System.out.println(planDto.getEndDate());
@@ -154,10 +167,10 @@ public class PlanController {
 			return new ResponseEntity<ResultDto>(new ResultDto("success", "수정 성공"), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<ResultDto>(new ResultDto("fail", "수정 실패"), HttpStatus.OK);
-			
+
 		}
 	}
-	
+
 	@ApiOperation(value = "게시물 좋아하기", notes = "게시물에 좋아요를 합니다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "게시물에 좋아요 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
 			@ApiResponse(code = 500, message = "서버에러!!") })
@@ -169,14 +182,13 @@ public class PlanController {
 			return new ResponseEntity<ResultDto>(new ResultDto("success", "좋아요 성공"), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<ResultDto>(new ResultDto("fail", "좋아요 실패"), HttpStatus.OK);
-			
+
 		}
 	}
 
-	
 	@ApiOperation(value = "게시물 좋아요 취소", notes = "게시물에 좋아요 취소를 합니다.")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시물에 좋아요 취소 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
+	@ApiResponses({ @ApiResponse(code = 200, message = "게시물에 좋아요 취소 OK!!"),
+			@ApiResponse(code = 404, message = "페이지없어!!"), @ApiResponse(code = 500, message = "서버에러!!") })
 	@DeleteMapping(value = "/favorite")
 	public ResponseEntity<?> cancelFavorite(@RequestBody FavoriteDto favoriteDto) {
 		logger.debug("cancelFavorite : {}", favoriteDto);
@@ -185,10 +197,10 @@ public class PlanController {
 			return new ResponseEntity<ResultDto>(new ResultDto("success", "좋아요 성공"), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<ResultDto>(new ResultDto("fail", "좋아요 실패"), HttpStatus.OK);
-			
+
 		}
 	}
-	
+
 	@ApiOperation(value = "여행계획 삭제", notes = "여행계획을 삭제합니다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "여행계획 삭제 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
 			@ApiResponse(code = 500, message = "서버에러!!") })
