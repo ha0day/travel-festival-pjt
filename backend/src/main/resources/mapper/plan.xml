@@ -15,6 +15,7 @@
         <result column="img" property="img" />
         <result column="shared" property="shared" />
         <result column="isfavorite" property="isFavorite" />
+        <result column="total_favorite" property="totalFavorite" />
     </resultMap>
 
     <resultMap type="tagDto" id="tag">
