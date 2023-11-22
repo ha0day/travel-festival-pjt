@@ -36,18 +36,12 @@ const boardlist = async () => {
     });
 };
 
-// const getFavoriteList = computed(() => {
-//   if(sstore.onlyFavorite
-
-//   return planList.filter((plan) => plan.isFavorite === 1);
-// });
 watch(
   () => sstore.onlyFavorite,
   () => {
     if (sstore.onlyFavorite) {
       onlyFavoriteToggle.value = true;
     } else onlyFavoriteToggle.value = false;
-    console.log("간다간다");
   }
 );
 
