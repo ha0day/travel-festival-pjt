@@ -16,6 +16,8 @@ const logout = async () => {
 onMounted(() => {
   sstore.isMy = false;
   sstore.isSearch = false;
+  sstore.onlyFavorite = false;
+  sstore.onlyShared = false;
   sstore.word = "";
 });
 </script>
