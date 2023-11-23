@@ -361,15 +361,22 @@ onMounted(() => {
                 </div>
               </div>
 
+
+
+              
+
+
+
               <div class="m-2 p-1 row justify-content-end">
-                <button
-                  type="button"
-                  class="w-btn w-btn-aqua float-right m-2 col-1"
-                  data-bs-toggle="modal"
+                
+                <div class="col-3">
+                  <div class="d-grid">
+                    <input class="btn btn-outline-primary align-items-center p-2 mx-5" type="button" data-bs-toggle="modal"
                   data-bs-target="#editModal"
-                >
-                  완료
-                </button>
+                      value="완료" />
+                  </div>
+                </div>
+                
               </div>
 
               <!-- Edit Modal -->
