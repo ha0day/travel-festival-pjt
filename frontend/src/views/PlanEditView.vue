@@ -182,23 +182,23 @@ onMounted(() => {
                   <h5>여행 이름</h5>
                   <input type="text" class="form-control mb-2" id="planName" :placeholder="planName" v-model="planName" />
                   <!-- <h5>시작일</h5>
-                    <div>
+                      <div>
+                        <input
+                          type="text"
+                          class="form-control mb-2"
+                          id="startDate"
+                          :placeholder="startDate"
+                          v-model="startDate"
+                        />
+                      </div>
+                      <h5>마지막일</h5>
                       <input
                         type="text"
                         class="form-control mb-2"
-                        id="startDate"
-                        :placeholder="startDate"
-                        v-model="startDate"
-                      />
-                    </div>
-                    <h5>마지막일</h5>
-                    <input
-                      type="text"
-                      class="form-control mb-2"
-                      id="endDate"
-                      :placeholder="endDate"
-                      v-model="endDate"
-                    /> -->
+                        id="endDate"
+                        :placeholder="endDate"
+                        v-model="endDate"
+                      /> -->
 
                   <div class="input-group mb-3">
                     <VDatePicker v-model.range="inputDate" mode="date" style="width: 50%" />
@@ -207,25 +207,25 @@ onMounted(() => {
                   <h5>세부내용</h5>
                   <textarea class="form-control mb-2" id="planDetail" rows="3" v-model="planDetail"></textarea>
                   <!-- <h4>[ 태그 ]</h4>
-                    <div
-                      class="mb-4 row"
-                      style="
-                        float: left;
-                        justify-content: space-between;
-                        display: flex;
-                      "
-                      v-for="(tag, index) in tagList"
-                      :key="index"
-                    >
-                      <div class="col-md-12">
-                        <button
-                          type="button"
-                          class="btn btn-primary rounded-pill m-1"
-                        >
-                          # {{ tag.tagName }}
-                        </button>
-                      </div>
-                    </div> -->
+                      <div
+                        class="mb-4 row"
+                        style="
+                          float: left;
+                          justify-content: space-between;
+                          display: flex;
+                        "
+                        v-for="(tag, index) in tagList"
+                        :key="index"
+                      >
+                        <div class="col-md-12">
+                          <button
+                            type="button"
+                            class="btn btn-primary rounded-pill m-1"
+                          >
+                            # {{ tag.tagName }}
+                          </button>
+                        </div>
+                      </div> -->
                   <h5>태그</h5>
                   <div class="justify-content-center mb-3">
                     <!-- <div class="overflow-scroll"> -->
@@ -358,11 +358,6 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-
-
-
-
-              
             </div>
           </div>
         </div>

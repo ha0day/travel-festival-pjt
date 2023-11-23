@@ -5,6 +5,7 @@ import { ref, onMounted } from "vue";
 import api from "axios";
 import { useRouter } from "vue-router";
 import { searchStore } from "@/stores/planListStore";
+import { VueTyper } from 'vue-typer'
 
 const sstore = searchStore();
 const router = useRouter();
@@ -83,9 +84,9 @@ onMounted(() => {
           <div class="carousel-item active">
             <img src="../assets/image/fall.png" alt="..." style="height: 100%" />
             <!-- <div class="carousel-caption d-none d-md-block">
-                      <h5>단풍으로 물든 에버랜드</h5>
-                      <p>놀이기구 뿐 아니라 경치도 예쁜 에버랜드!</p>
-                    </div> -->
+                        <h5>단풍으로 물든 에버랜드</h5>
+                        <p>놀이기구 뿐 아니라 경치도 예쁜 에버랜드!</p>
+                      </div> -->
             <div class="container">
               <div class="carousel-caption text-start">
                 <h2 class="featurette-heading fw-normal lh-1">
@@ -129,7 +130,16 @@ onMounted(() => {
       </div>
 
       <!-- 검색창 -->
-      <div class="mt-5 py-2">
+<!-- 
+      <vue-typer class="mt-5" :text='["지금 어디로 떠나고 싶으신가요?","지금 어디로 떠나고 싶으신가요?"]' :repeat='Infinity' :shuffle='true' initial-action='typing'
+        :pre-type-delay='2000' :type-delay='70' :pre-erase-delay='2000' :erase-delay='70' erase-style='backspace'
+        :erase-on-complete='false' caret-animation='blink'></vue-typer> -->
+
+
+
+
+
+      <div class="mt-3 py-2">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
         <div class="search-mode mb-2" @click="searchInput">
           <input type="text" class="form-control" placeholder="검색어를 입력하세요." ref="searchRef" @keyup.enter="search(word)"
