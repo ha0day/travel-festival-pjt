@@ -10,8 +10,7 @@ const isChangePass = ref(false);
 const rePass = ref("");
 const passwordVerifcationString = ref("");
 const passwordVerifcation = computed(() => {
-  console.log("passwordVerifcation: ", passwordVerifcation.value);
-  // console.log("isChangePass: ", isChangePass.value);
+  if (isChangePass.value === false) return true;
   if (userInfo.value.userPassword === "") {
     // 비밀번호가 비어있다면
     passwordVerifcationString.value = "비밀번호는 필수입니다.";
@@ -117,9 +116,10 @@ const changePassword = () => {
                   <label for="firstName" class="form-label">비밀번호</label>
                   <div class="input-group">
                     <input type="text" class="form-control" placeholder="******" disabled />
+
                     <input
+                      class="btn btn-outline-dark align-items-center p-2 mx-1"
                       type="button"
-                      class="btn btn-primary"
                       @click="changePassword()"
                       value="변경하기"
                     />
@@ -191,19 +191,40 @@ const changePassword = () => {
                       v-model="userInfo.emailDomain"
                     />
                   </div>
-                  <input
-                    type="button"
-                    class="w-100 btn btn-primary btn-lg"
-                    @click="modify()"
-                    value="저장"
-                  />
-                  <input
-                    type="button"
-                    class="w-100 btn btn-danger btn-lg mt-3"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteModal"
-                    value="회원탈퇴"
-                  />
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="d-grid">
+                        <input
+                          v-if="!passwordVerifcation"
+                          class="btn btn-dark align-items-center p-2"
+                          type="button"
+                          @click="modify()"
+                          value="저장"
+                          disabled
+                        />
+                        <input
+                          v-if="passwordVerifcation"
+                          class="btn btn-outline-primary align-items-center p-2"
+                          type="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#confirmChangeModal"
+                          value="저장"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-6">
+                      <div class="d-grid">
+                        <input
+                          class="btn btn-outline-danger align-items-center p-2"
+                          type="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteModal"
+                          value="회원탈퇴"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
@@ -214,33 +235,81 @@ const changePassword = () => {
 
     <div
       class="modal fade"
-      id="deleteModal"
+      id="confirmChangeModal"
       tabindex="-1"
-      aria-labelledby="exampleModalLabel"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">회원 탈퇴</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-0">
+          <div class="modal-body p-4 px-5">
+            <div class="main-content text-center">
+              <form action="#">
+                <h3 class="my-5">회원정보수정이 완료되었습니다!</h3>
+
+                <!-- @click="register()" -->
+                <div class="col-12">
+                  <div class="d-grid">
+                    <input
+                      class="btn btn-outline-dark align-items-center p-2 mx-4"
+                      type="button"
+                      @click="modify()"
+                      data-bs-dismiss="modal"
+                      value="확인"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="modal-body">정말 탈퇴하시겠습니까?</div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">아니요</button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="deleteAccount()"
-              data-bs-dismiss="modal"
-            >
-              네
-            </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-0">
+          <div class="modal-body p-4 px-5">
+            <div class="main-content text-center">
+              <a href="#" class="close-btn" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><span class="icon-close2"></span></span>
+              </a>
+
+              <div class="warp-icon mb-4">
+                <span class="icon-lock2"></span>
+              </div>
+              <form action="#">
+                <h4 class="mb-4">정말 탈퇴하시겠습니까?</h4>
+
+                <div class="row mt-4">
+                  <div class="d-grid col">
+                    <input
+                      class="btn btn-outline-danger align-items-center p-2 mx-1"
+                      type="button"
+                      @click="deleteAccount()"
+                      data-bs-dismiss="modal"
+                      value="확인"
+                    />
+                  </div>
+                  <div class="d-grid col">
+                    <input
+                      class="btn btn-outline-dark align-items-center p-2 mx-1"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      value="취소"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
