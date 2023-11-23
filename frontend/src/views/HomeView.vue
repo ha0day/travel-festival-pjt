@@ -67,8 +67,15 @@ onMounted(() => {
       <link href="/src/assets/carousel.css" rel="stylesheet" />
     </head>
     <body>
-      <main>
-        <div id="carouselExampleCaptions" class="carousel slide mb-2" data-bs-ride="carousel">
+      <main
+        style="display: flex; flex-direction: column; align-items: center; justify-content: center"
+      >
+        <div
+          id="carouselExampleCaptions"
+          class="carousel slide mb-2"
+          data-bs-ride="carousel"
+          style="width: fit-content"
+        >
           <div class="carousel-indicators">
             <button
               type="button"
