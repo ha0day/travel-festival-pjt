@@ -10,7 +10,7 @@ const sstore = searchStore();
 const ustore = userStore();
 const logout = async () => {
   await ustore.userLogout(ustore.userInfo.userId);
-  router.push({ path: "/" });
+  router.push({ path: "/login" });
 };
 
 onMounted(() => {
