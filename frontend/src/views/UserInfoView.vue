@@ -10,8 +10,7 @@ const isChangePass = ref(false);
 const rePass = ref("");
 const passwordVerifcationString = ref("");
 const passwordVerifcation = computed(() => {
-  console.log("passwordVerifcation: ", passwordVerifcation.value);
-  // console.log("isChangePass: ", isChangePass.value);
+  if (isChangePass.value === false) return true;
   if (userInfo.value.userPassword === "") {
     // 비밀번호가 비어있다면
     passwordVerifcationString.value = "비밀번호는 필수입니다.";
@@ -57,7 +56,6 @@ const modify = async () => {
         emailDomain: userInfo.value.emailDomain,
       })
       .then(() => {
-        alert("성공적으로 회원정보를 변경했습니다.");
         router.push({ path: "/" });
       })
       .catch((e) => {
@@ -193,24 +191,38 @@ const changePassword = () => {
                       v-model="userInfo.emailDomain"
                     />
                   </div>
-
-                  <div class="row mt-4">
-                    <div class="d-grid col">
-                      <input
-                        class="btn btn-outline-dark align-items-center p-2 mx-1"
-                        type="button"
-                        @click="modify()"
-                        value="저장"
-                      />
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="d-grid">
+                        <input
+                          v-if="!passwordVerifcation"
+                          class="btn btn-dark align-items-center p-2"
+                          type="button"
+                          @click="modify()"
+                          value="저장"
+                          disabled
+                        />
+                        <input
+                          v-if="passwordVerifcation"
+                          class="btn btn-outline-primary align-items-center p-2"
+                          type="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#confirmChangeModal"
+                          value="저장"
+                        />
+                      </div>
                     </div>
-                    <div class="d-grid col">
-                      <input
-                        class="btn btn-outline-danger align-items-center p-2 mx-1"
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteModal"
-                        value="회원탈퇴"
-                      />
+
+                    <div class="col-6">
+                      <div class="d-grid">
+                        <input
+                          class="btn btn-outline-danger align-items-center p-2"
+                          type="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteModal"
+                          value="회원탈퇴"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -219,6 +231,40 @@ const changePassword = () => {
           </div>
         </div>
       </main>
+    </div>
+
+    <div
+      class="modal fade"
+      id="confirmChangeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-0">
+          <div class="modal-body p-4 px-5">
+            <div class="main-content text-center">
+              <form action="#">
+                <h3 class="my-5">회원정보수정이 완료되었습니다!</h3>
+
+                <!-- @click="register()" -->
+                <div class="col-12">
+                  <div class="d-grid">
+                    <input
+                      class="btn btn-outline-dark align-items-center p-2 mx-4"
+                      type="button"
+                      @click="modify()"
+                      data-bs-dismiss="modal"
+                      value="확인"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div

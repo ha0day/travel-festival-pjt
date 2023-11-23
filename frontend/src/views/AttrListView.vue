@@ -142,19 +142,19 @@ const attrlist = async () => {
   <div class="row col-12 mt-2 ms-1 card-table"></div>
   <VKakaoMapSearch :attractions="attrList" style="width: 80%" />
 
-  <table class="table">
+  <table class="table" style="width: 50%; margin: auto">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">이름</th>
-        <th scope="col">주소</th>
+        <th scope="col" style="width: 5%">#</th>
+        <th scope="col" style="width: 40%">이름</th>
+        <th scope="col" style="width: 30%">주소</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(attraction, index) in attrList" :key="index">
         <td>{{ index + 1 }}</td>
-        <td>{{ attraction.title }}</td>
-        <td>{{ attraction.addr1 }}</td>
+        <td style="width: 40%">{{ attraction.title }}</td>
+        <td style="width: 30%">{{ attraction.addr1 }}</td>
       </tr>
     </tbody>
   </table>
