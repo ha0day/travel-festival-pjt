@@ -23,6 +23,7 @@ const error = reactive({
 });
 
 const findPassword = async () => {
+  console.log(findUserId.value);
   await api
     .get(`${import.meta.env.VITE_VUE_API_URL}/members/login/${findUserId.value}`)
     .then(({ data }) => {
@@ -191,6 +192,62 @@ async function signIn() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="findPasswordModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-0">
+          <div class="modal-body p-4 px-5">
+            <div class="main-content text-center">
+              <a href="#" class="close-btn" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><span class="icon-close2"></span></span>
+              </a>
+
+              <div class="warp-icon mb-4">
+                <span class="icon-lock2"></span>
+              </div>
+              <form action="#">
+                <h1 class="mb-4">비밀번호 찾기</h1>
+                <p class="mb-3">비밀번호를 찾을 아이디를 입력해주세요.</p>
+                <div class="form-group mb-4">
+                  <input
+                    type="text"
+                    class="form-control text-center"
+                    placeholder=""
+                    v-model="findUserId"
+                  />
+                </div>
+
+                <div class="row mt-4">
+                  <div class="d-grid col">
+                    <input
+                      class="btn btn-outline-dark align-items-center p-2 mx-1"
+                      type="button"
+                      @click="findPassword()"
+                      value="확인"
+                    />
+                  </div>
+                  <div class="d-grid col">
+                    <input
+                      class="btn btn-outline-danger align-items-center p-2 mx-1"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      value="취소"
+                    />
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
