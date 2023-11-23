@@ -53,46 +53,6 @@ const clickFavorite = () => {
 </script>
 
 <template>
-  <!--<div class="col">
-     <div class="card shadow-sm">
-      <img :src="plan.img" class="img-fluid mx-auto d-block" alt="Responsive image" />
-      <div class="card-body">
-        <div class="row">
-          <figure>
-            <blockquote class="blockquote">
-              <router-link :to="{ name: 'plandetail', params: { id: plan.planId } }">
-                <p>{{ plan.planName }}</p>
-              </router-link>
-            </blockquote>
-            <figcaption class="blockquote-footer">
-              <cite title="Source Title">{{ plan.userId }}</cite>
-            </figcaption>
-          </figure>
-          <p class="card-text">
-            {{ plan.planDetail }}
-          </p>
-
-          <div class="d-flex align-items-center">
-            <small class="text-primary" v-for="(tag, index) in plan.tagList" :key="index">
-              #{{ tag }} &nbsp;</small
-            >
-          </div>
-          <div>
-            <span class="d-inline-block btn" @click="clickFavorite">
-              <i
-                v-if="favoriteToggle === true"
-                class="fa-solid fa-heart fa-2xl"
-                style="color: #ff0000"
-              ></i>
-              <i v-else class="fa-regular fa-heart fa-2xl" style="color: #ff0000"></i>
-            </span>
-            <span class="d-inline-block float-right">{{ currentTotalFavorite }}</span>
-          </div>
-        </div>
-      </div>
-    </div> 
-  </div>
-  -->
   <div class="col-md-5">
     <div class="card card-blog">
       <div class="card-image">
@@ -112,19 +72,6 @@ const clickFavorite = () => {
           {{ plan.planDetail }}
         </p>
         <div class="stats">
-          <!-- <i
-            v-if="favoriteToggle === true"
-            class="fa-solid fa-heart fa-2xl"
-            style="color: #ff0000"
-            @click="clickFavorite"
-          ></i>
-          <i
-            v-else
-            class="fa-regular fa-heart fa-2xl"
-            style="color: #ff0000"
-            @click="clickFavorite"
-          ></i> -->
-
           <i
             v-if="favoriteToggle === true"
             class="fa-solid fa-heart fa"

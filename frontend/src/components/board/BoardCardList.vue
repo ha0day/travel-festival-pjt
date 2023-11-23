@@ -4,6 +4,10 @@ import BoardCard from "./BoardCard.vue";
 import api from "axios";
 import { searchStore } from "@/stores/planListStore";
 import { userStore } from "@/stores/userStore";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 const sstore = searchStore();
 const ustore = userStore();
 const planList = ref([]);
@@ -61,6 +65,9 @@ watch(
     } else onlySharedToggle.value = false;
   }
 );
+const addPlan = () => {
+  router.push({ path: "/addplan" });
+};
 
 onMounted(() => {
   boardlist();
@@ -70,15 +77,39 @@ onMounted(() => {
 <template>
   <div class="cards-1 section-gray">
     <div class="container">
-      <div class="form-check form-check-inline m-3">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="favoriteCheckBox"
-          v-model="sstore.onlyFavorite"
-          @change="check($event)"
-        />
-        <label class="form-check-label ms-3" for="inlineCheckbox1">좋아요한 여행계획만</label>
+      <div class="mb-4" v-if="!sstore.isMy">
+        <div class="form-check form-check-inline m-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="favoriteCheckBox"
+            v-model="sstore.onlyFavorite"
+            @change="check($event)"
+          />
+          <label class="form-check-label ms-3" for="inlineCheckbox1">좋아요한 여행계획만</label>
+        </div>
+      </div>
+
+      <div v-if="sstore.isMy" class="mb-4">
+        <div class="form-check form-check-inline m-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="favoriteCheckBox"
+            v-model="sstore.onlyShared"
+            @change="check($event)"
+          />
+          <label class="form-check-label ms-3" for="favoriteCheckBox">공유된 여행계획만</label>
+        </div>
+        <div class="form-check form-check-inline" @click="addPlan()">
+          <button
+            class="btn btn-outline-primary d-inline-flex align-items-center"
+            style="font-size: 14px"
+            type="button"
+          >
+            <i class="fa-light fa-plus"></i>&nbsp; 여행계획추가
+          </button>
+        </div>
       </div>
       <div
         v-if="!onlyFavoriteToggle && !onlySharedToggle"
