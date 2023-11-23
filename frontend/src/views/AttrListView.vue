@@ -97,21 +97,13 @@ const attrlist = async () => {
 <template>
   <div id="form-search" class="d-flex my-3">
     <!-- <input type="hidden" id="ccommand" value="ssearch" /> -->
-    <select
-      id="search-area"
-      class="form-select me-2 search-sido"
-      @change="changeSido()"
-    >
+    <select id="search-area" class="form-select me-2 search-sido" @change="changeSido()">
       <option value="0" selected>시도선택</option>
       <option v-for="sido in sidoList" :value="sido.sidoCode">
         {{ sido.sidoName }}
       </option>
     </select>
-    <select
-      id="search-sub-area"
-      class="form-select me-2 search-gugun"
-      @change="setGugun()"
-    >
+    <select id="search-sub-area" class="form-select me-2 search-gugun" @change="setGugun()">
       <option value="0" selected>구군선택</option>
       <option v-for="gugun in gugunList" :value="gugun.gugunCode">
         {{ gugun.gugunName }}
@@ -124,10 +116,7 @@ const attrlist = async () => {
       @change="setType()"
     >
       <option value="0" selected>관광지 유형</option>
-      <option
-        v-for="contentType in contentTypeList"
-        :value="contentType.contentTypeId"
-      >
+      <option v-for="contentType in contentTypeList" :value="contentType.contentTypeId">
         {{ contentType.contentTypeName }}
       </option>
     </select>
@@ -143,7 +132,7 @@ const attrlist = async () => {
       type="button"
       id="btn-search"
       @click="attrlist()"
-      class="btn btn-outline-success"
+      class="btn btn-outline-dark"
       value="검색"
     />
   </div>
