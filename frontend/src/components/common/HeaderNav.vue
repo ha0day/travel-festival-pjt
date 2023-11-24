@@ -24,12 +24,12 @@ onMounted(() => {
 
 <template>
   <nav
-    class="navbar navbar-expand-lg navbar-light fixed-top"
+    class="navbar navbar-expand-lg navbar-light"
     style="background-color: white"
   >
     <div class="container">
       <a class="navbar-brand" href="/">
-        <img src="../../assets/image/logo.jpg" alt="" style="width: 10%" />
+        <img src="../../assets/image/logo.jpg" alt="" style="width: 8%" />
         <span style="font-size: 22px">&nbsp; &nbsp; 오!전-국-여행자랑</span></a
       >
       <button

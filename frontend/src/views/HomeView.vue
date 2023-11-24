@@ -54,13 +54,22 @@ onMounted(() => {
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="description" content="" />
-      <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
+      <meta
+        name="author"
+        content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+      />
       <meta name="generator" content="Hugo 0.118.2" />
       <title>Carousel Template · Bootstrap v5.3</title>
 
-      <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/" />
+      <link
+        rel="canonical"
+        href="https://getbootstrap.com/docs/5.3/examples/carousel/"
+      />
 
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"
+      />
 
       <!-- <link href="/src/assets/bootstrap.min.css" rel="stylesheet" /> -->
 
@@ -69,8 +78,12 @@ onMounted(() => {
 
     <body>
       <main
-        class="mt-4"
-        style="display: flex; flex-direction: column; align-items: center; justify-content: center"
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        "
       >
         <div
           id="carouselExampleCaptions"
@@ -102,7 +115,11 @@ onMounted(() => {
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="../assets/image/fall.png" alt="..." style="height: 100%" />
+              <img
+                src="../assets/image/fall.png"
+                alt="..."
+                style="height: 100%"
+              />
               <!-- <div class="carousel-caption d-none d-md-block">
                         <h5>단풍으로 물든 에버랜드</h5>
                         <p>놀이기구 뿐 아니라 경치도 예쁜 에버랜드!</p>
@@ -118,7 +135,11 @@ onMounted(() => {
               </div>
             </div>
             <div class="carousel-item">
-              <img src="../assets/image/city.png" alt="..." style="height: 100%" />
+              <img
+                src="../assets/image/city.png"
+                alt="..."
+                style="height: 100%"
+              />
 
               <div class="container">
                 <div class="carousel-caption">
@@ -129,7 +150,11 @@ onMounted(() => {
               </div>
             </div>
             <div class="carousel-item">
-              <img src="../assets/image/snow.png" alt="..." style="height: 100%" />
+              <img
+                src="../assets/image/snow.png"
+                alt="..."
+                style="height: 100%"
+              />
               <div class="container">
                 <div class="carousel-caption">
                   <h1>눈으로 뒤덮인 대한민국</h1>
@@ -295,7 +320,8 @@ input {
   background-color: rgba(0, 0, 0, 0.1);
   border: solid rgba(0, 0, 0, 0.15);
   border-width: 1px 0;
-  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1), inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
 }
 
 .b-example-vr {
