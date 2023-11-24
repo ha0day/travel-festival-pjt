@@ -56,7 +56,7 @@ onMounted(() => {
           </li>
           <li class="nav-item">
             <a href="/planlist" class="nav-link active" aria-current="page"
-              >여행계획목록</a
+              >여행계획게시판</a
             >
           </li>
           <li class="nav-item" v-if="ustore.userInfo !== null">

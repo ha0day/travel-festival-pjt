@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/userStore";
 import api from "axios";
@@ -9,6 +9,10 @@ const ustore = userStore();
 const isChangePass = ref(false);
 const rePass = ref("");
 const passwordVerifcationString = ref("");
+const user = reactive({
+  userId: "",
+  userPassword: "",
+});
 const passwordVerifcation = computed(() => {
   if (isChangePass.value === false) return true;
   if (userInfo.value.userPassword === "") {
@@ -35,7 +39,9 @@ const userInfo = ref({
 const deleteAccount = async () => {
   // 회원삭제
   await api
-    .delete(`${import.meta.env.VITE_VUE_API_URL}/members/${ustore.userInfo.userId}`)
+    .delete(
+      `${import.meta.env.VITE_VUE_API_URL}/members/${ustore.userInfo.userId}`
+    )
     .then(async () => {
       await ustore.userLogout(ustore.userInfo.userId);
       router.push({ path: "/" });
@@ -45,9 +51,41 @@ const deleteAccount = async () => {
     });
 };
 
+async function signIn() {
+  console.log("로그인 정보: " + user.userPassword);
+  await ustore.userConfirm(user);
+  let token = sessionStorage.getItem("access-token");
+  console.log("1. confirm() token >> " + token);
+  if (ustore.isLogin) {
+    await ustore.getUserInfo(token);
+    console.log("4. confirm() userInfo :: ", ustore.userInfo);
+    if (ustore.userInfo.isAdmin) {
+      toast.success(ustore.userInfo.userId + "관리자 님 환영합니다!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
+      });
+    } else {
+      router.push({ path: "/" });
+    }
+    if (click.rememeberId) {
+      // 아이디 저장 필요함
+      await storeIDByCookie(user.userId);
+      await getIDByCookie();
+    }
+    console.log("ustore userInfo: " + ustore.isLogin);
+    // router.push({ name: "home" }); // 메인 페이지로 이동
+  } else {
+    error.message = "아이디 또는 비밀번호가 잘못되었습니다.";
+  }
+}
+
 const modify = async () => {
-  if ((isChangePass.value && passwordVerifcation.value) || !isChangePass.value) {
+  if (
+    (isChangePass.value && passwordVerifcation.value) ||
+    !isChangePass.value
+  ) {
     // 비밀번호변경했고 조건을 만족했다면, 비밀번호를 변경하지 않았다면
+
     await api
       .put(`${import.meta.env.VITE_VUE_API_URL}/members/`, {
         userId: userInfo.value.userId,
@@ -56,6 +94,9 @@ const modify = async () => {
         emailDomain: userInfo.value.emailDomain,
       })
       .then(() => {
+        user.userId = userInfo.value.userId;
+        user.userPassword = userInfo.value.userPassword;
+        signIn();
         router.push({ path: "/" });
       })
       .catch((e) => {
@@ -115,7 +156,12 @@ const changePassword = () => {
                 <div class="col-sm-12 mb-3">
                   <label for="firstName" class="form-label">비밀번호</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" placeholder="******" disabled />
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="******"
+                      disabled
+                    />
 
                     <input
                       class="btn btn-outline-dark align-items-center p-2 mx-1"
@@ -129,7 +175,9 @@ const changePassword = () => {
 
               <div v-if="isChangePass" class="row g-3">
                 <div class="col-sm-12 mb-3">
-                  <label for="firstName" class="form-label">새로운 비밀번호</label>
+                  <label for="firstName" class="form-label"
+                    >새로운 비밀번호</label
+                  >
                   <input
                     type="password"
                     class="form-control"
@@ -139,7 +187,8 @@ const changePassword = () => {
                   />
                   <p
                     v-show="
-                      !passwordVerifcation && passwordVerifcationString === '비밀번호는 필수입니다.'
+                      !passwordVerifcation &&
+                      passwordVerifcationString === '비밀번호는 필수입니다.'
                     "
                     class="error-message mb-2 mt-2"
                   >
@@ -150,7 +199,9 @@ const changePassword = () => {
 
               <div v-if="isChangePass" class="row g-3">
                 <div class="col-sm-12 mb-3">
-                  <label for="firstName" class="form-label">비밀번호 확인</label>
+                  <label for="firstName" class="form-label"
+                    >비밀번호 확인</label
+                  >
                   <input
                     type="password"
                     class="form-control"
@@ -161,7 +212,8 @@ const changePassword = () => {
                   <p
                     v-show="
                       !passwordVerifcation &&
-                      passwordVerifcationString === '비밀번호가 일치하지 않습니다.' &&
+                      passwordVerifcationString ===
+                        '비밀번호가 일치하지 않습니다.' &&
                       rePass.length != 0
                     "
                     class="error-message mb-2 mt-2"
@@ -279,8 +331,15 @@ const changePassword = () => {
         <div class="modal-content rounded-0">
           <div class="modal-body p-4 px-5">
             <div class="main-content text-center">
-              <a href="#" class="close-btn" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><span class="icon-close2"></span></span>
+              <a
+                href="#"
+                class="close-btn"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true"
+                  ><span class="icon-close2"></span
+                ></span>
               </a>
 
               <div class="warp-icon mb-4">
@@ -338,7 +397,8 @@ const changePassword = () => {
   background-color: rgba(0, 0, 0, 0.1);
   border: solid rgba(0, 0, 0, 0.15);
   border-width: 1px 0;
-  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1), inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
 }
 
 .b-example-vr {

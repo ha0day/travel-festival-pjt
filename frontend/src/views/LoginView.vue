@@ -25,7 +25,9 @@ const error = reactive({
 const findPassword = async () => {
   console.log(findUserId.value);
   await api
-    .get(`${import.meta.env.VITE_VUE_API_URL}/members/login/${findUserId.value}`)
+    .get(
+      `${import.meta.env.VITE_VUE_API_URL}/members/login/${findUserId.value}`
+    )
     .then(({ data }) => {
       alert("등록된 이메일로 비밀번호를 발송하였습니다.");
       alert(data);
@@ -114,7 +116,9 @@ async function signIn() {
                   alt=""
                 />
               </div>
-              <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+              <div
+                class="col-12 col-md-6 d-flex align-items-center justify-content-center"
+              >
                 <div class="col-12 col-lg-11 col-xl-10">
                   <div class="card-body p-3 p-md-4 p-xl-5">
                     <div class="row">
@@ -125,7 +129,11 @@ async function signIn() {
                               <!-- <img src="./assets/img/bsb-logo.svg" alt="" width="175" height="57" /> -->
                             </a>
                           </div>
-                          <h1 class="fw-light d-flex justify-content-center mt-5">로그인</h1>
+                          <h1
+                            class="fw-light d-flex justify-content-center mt-5"
+                          >
+                            로그인
+                          </h1>
                         </div>
                       </div>
                     </div>
@@ -154,7 +162,9 @@ async function signIn() {
                               required
                             />
 
-                            <label for="password" class="form-label">비밀번호</label>
+                            <label for="password" class="form-label"
+                              >비밀번호</label
+                            >
                           </div>
                         </div>
 
@@ -175,7 +185,9 @@ async function signIn() {
                         <div
                           class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-center mt-4"
                         >
-                          <label class="link-secondary text-decoration-none" @click="register()"
+                          <label
+                            class="link-secondary text-decoration-none"
+                            @click="register()"
                             >회원가입</label
                           >
 
@@ -210,8 +222,15 @@ async function signIn() {
         <div class="modal-content rounded-0">
           <div class="modal-body p-4 px-5">
             <div class="main-content text-center">
-              <a href="#" class="close-btn" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><span class="icon-close2"></span></span>
+              <a
+                href="#"
+                class="close-btn"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true"
+                  ><span class="icon-close2"></span
+                ></span>
               </a>
 
               <div class="warp-icon mb-4">
@@ -297,7 +316,8 @@ async function signIn() {
   background-color: rgba(0, 0, 0, 0.1);
   border: solid rgba(0, 0, 0, 0.15);
   border-width: 1px 0;
-  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1), inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
 }
 
 .b-example-vr {
