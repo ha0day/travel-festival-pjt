@@ -5,6 +5,12 @@ import api from "axios";
 import { useRouter } from "vue-router";
 import { searchStore } from "@/stores/planListStore";
 
+const arr = ref([
+  "지금 어디로 떠나고 싶으신가요?",
+  "어디로 갈까요?",
+  "언제 떠날까요?",
+  "어디로 떠날까요?",
+]);
 const sstore = searchStore();
 const router = useRouter();
 const hotTags = ref({});
@@ -51,34 +57,20 @@ onMounted(() => {
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="description" content="" />
-      <meta
-        name="author"
-        content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
-      />
+      <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
       <meta name="generator" content="Hugo 0.118.2" />
       <title>Carousel Template · Bootstrap v5.3</title>
 
-      <link
-        rel="canonical"
-        href="https://getbootstrap.com/docs/5.3/examples/carousel/"
-      />
+      <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/" />
 
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"
-      />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
       <link href="/src/assets/carousel.css" rel="stylesheet" />
     </head>
 
     <body>
       <main
-        style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        "
+        style="display: flex; flex-direction: column; align-items: center; justify-content: center"
       >
         <div
           id="carouselExampleCaptions"
@@ -110,11 +102,7 @@ onMounted(() => {
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img
-                src="../assets/image/fall.png"
-                alt="..."
-                style="height: 100%"
-              />
+              <img src="../assets/image/fall.png" alt="..." style="height: 100%" />
               <div class="container">
                 <div class="carousel-caption text-start">
                   <h2 class="featurette-heading fw-normal lh-1">
@@ -126,11 +114,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="carousel-item">
-              <img
-                src="../assets/image/city.png"
-                alt="..."
-                style="height: 100%"
-              />
+              <img src="../assets/image/city.png" alt="..." style="height: 100%" />
 
               <div class="container">
                 <div class="carousel-caption">
@@ -140,11 +124,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="carousel-item">
-              <img
-                src="../assets/image/snow.png"
-                alt="..."
-                style="height: 100%"
-              />
+              <img src="../assets/image/snow.png" alt="..." style="height: 100%" />
               <div class="container">
                 <div class="carousel-caption">
                   <h1>눈으로 뒤덮인 대한민국</h1>
@@ -172,7 +152,7 @@ onMounted(() => {
           </button>
         </div>
 
-        <h1 class="mt-5">지금 어디로 떠나고 싶으신가요?</h1>
+        <h1 class="mt-5"><VueWriter :array="arr" /></h1>
 
         <div class="mt-3 py-2">
           <link
