@@ -64,8 +64,6 @@ async function signIn() {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1000,
       });
-    } else {
-      router.push({ path: "/" });
     }
     if (click.rememeberId) {
       // 아이디 저장 필요함
@@ -97,7 +95,7 @@ const modify = async () => {
         user.userId = userInfo.value.userId;
         user.userPassword = userInfo.value.userPassword;
         signIn();
-        router.push({ path: "/" });
+        router.push({ path: "/userinfo" });
       })
       .catch((e) => {
         console.log(e);
