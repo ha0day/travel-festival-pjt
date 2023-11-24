@@ -152,7 +152,9 @@ onMounted(() => {
           </button>
         </div>
 
-        <h1 class="mt-5"><VueWriter :array="arr" /></h1>
+        <h1 class="mt-5">
+          <VueWriter :array="arr" class="is-typed cursor" :caret="underscore" />
+        </h1>
 
         <div class="mt-3 py-2">
           <link
@@ -284,5 +286,40 @@ input {
   border-radius: 25px;
   text-decoration: none;
   font-weight: 600;
+}
+
+.is-typed {
+  font-family: "Monaco";
+}
+.is-typed span.typed {
+  colour: black;
+}
+.is-typed span.cursor {
+  display: inline-block;
+  width: 3px;
+  background-color: black;
+  animation: blink 1s infinite;
+}
+.is-typed span.underscore {
+  display: inline-flex;
+  width: 10px;
+  height: 1px;
+  align-items: flex-end;
+  background-color: black;
+  animation: blink 1s infinite;
+}
+.is-typed span.cursor.typing {
+  animation: none;
+}
+@keyframes blink {
+  49% {
+    background-color: black;
+  }
+  50% {
+    background-color: transparent;
+  }
+  99% {
+    background-color: transparent;
+  }
 }
 </style>
