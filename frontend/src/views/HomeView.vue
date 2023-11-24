@@ -1,6 +1,5 @@
 <script setup>
 import HotPlaceZone from "@/components/HotPlaceZone.vue";
-import BoardTable from "@/components/BoardTable.vue";
 import { ref, onMounted } from "vue";
 import api from "axios";
 import { useRouter } from "vue-router";
@@ -17,7 +16,6 @@ const getHotTags = async () => {
     .get(`${import.meta.env.VITE_VUE_API_URL}/plan/hottag`)
     .then(({ data }) => {
       hotTags.value = data;
-      console.log("hotTags: " + hotTags);
     })
     .catch((e) => {
       console.log(e);
@@ -35,7 +33,6 @@ const searchInput = () => {
 };
 
 const searchTag = (t) => {
-  console.log(t);
   sstore.word = t;
   sstore.isSearch = true;
   router.push({ name: "planlist" });
@@ -70,8 +67,6 @@ onMounted(() => {
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"
       />
-
-      <!-- <link href="/src/assets/bootstrap.min.css" rel="stylesheet" /> -->
 
       <link href="/src/assets/carousel.css" rel="stylesheet" />
     </head>
@@ -120,10 +115,6 @@ onMounted(() => {
                 alt="..."
                 style="height: 100%"
               />
-              <!-- <div class="carousel-caption d-none d-md-block">
-                        <h5>단풍으로 물든 에버랜드</h5>
-                        <p>놀이기구 뿐 아니라 경치도 예쁜 에버랜드!</p>
-                      </div> -->
               <div class="container">
                 <div class="carousel-caption text-start">
                   <h2 class="featurette-heading fw-normal lh-1">
@@ -143,7 +134,6 @@ onMounted(() => {
 
               <div class="container">
                 <div class="carousel-caption">
-                  <!-- carousel-caption text-end -->
                   <h1>반짝이는 야경명소</h1>
                   <p>밤이 더 아름다운 대한민국!</p>
                 </div>
@@ -181,12 +171,6 @@ onMounted(() => {
             <span class="visually-hidden">Next</span>
           </button>
         </div>
-
-        <!-- 검색창 -->
-        <!-- 
-      <vue-typer class="mt-5" :text='["지금 어디로 떠나고 싶으신가요?","지금 어디로 떠나고 싶으신가요?"]' :repeat='Infinity' :shuffle='true' initial-action='typing'
-        :pre-type-delay='2000' :type-delay='70' :pre-erase-delay='2000' :erase-delay='70' erase-style='backspace'
-        :erase-on-complete='false' caret-animation='blink'></vue-typer> -->
 
         <h1 class="mt-5">지금 어디로 떠나고 싶으신가요?</h1>
 
@@ -281,7 +265,6 @@ onMounted(() => {
 }
 
 input {
-  /* border: 1px solid #f1f1f1; */
   border-radius: 50px;
   width: 100%;
   height: 100%;
@@ -300,82 +283,10 @@ input {
   left: 40px;
 }
 
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
 @media (min-width: 768px) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
-}
-
-.b-example-divider {
-  width: 100%;
-  height: 3rem;
-  background-color: rgba(0, 0, 0, 0.1);
-  border: solid rgba(0, 0, 0, 0.15);
-  border-width: 1px 0;
-  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
-    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
-}
-
-.b-example-vr {
-  flex-shrink: 0;
-  width: 1.5rem;
-  height: 100vh;
-}
-
-.bi {
-  vertical-align: -0.125em;
-  fill: currentColor;
-}
-
-.nav-scroller {
-  position: relative;
-  z-index: 2;
-  height: 2.75rem;
-  overflow-y: hidden;
-}
-
-.nav-scroller .nav {
-  display: flex;
-  flex-wrap: nowrap;
-  padding-bottom: 1rem;
-  margin-top: -1px;
-  overflow-x: auto;
-  text-align: center;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-}
-
-.btn-bd-primary {
-  --bd-violet-bg: #712cf9;
-  --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-  --bs-btn-font-weight: 600;
-  --bs-btn-color: var(--bs-white);
-  --bs-btn-bg: var(--bd-violet-bg);
-  --bs-btn-border-color: var(--bd-violet-bg);
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg: #6528e0;
-  --bs-btn-hover-border-color: #6528e0;
-  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-  --bs-btn-active-color: var(--bs-btn-hover-color);
-  --bs-btn-active-bg: #5a23c8;
-  --bs-btn-active-border-color: #5a23c8;
-}
-
-.bd-mode-toggle {
-  z-index: 1500;
-}
-
-.bd-mode-toggle .dropdown-menu .active .bi {
-  display: block !important;
 }
 
 .w-btn-tag {
@@ -391,9 +302,7 @@ input {
   padding: 7px 22px;
   margin: 7px;
   border-radius: 25px;
-  /* box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); */
   text-decoration: none;
   font-weight: 600;
-  /* transition: 0.25s; */
 }
 </style>

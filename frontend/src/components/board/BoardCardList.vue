@@ -24,7 +24,6 @@ const boardlist = async () => {
       userId: ustore.userInfo.userId,
     })
     .then(({ data }) => {
-      console.log(data);
       if (ustore.isLogin && sstore.isMy) {
         // 내여행계획
         planList.value = data.filter(
@@ -41,7 +40,6 @@ const boardlist = async () => {
       onlySharedList.value = planList.value.filter((plan) => {
         return plan.shared === 1;
       });
-      console.log("onlySharedList", onlySharedList.value);
     })
     .catch((e) => {
       console.log(e);

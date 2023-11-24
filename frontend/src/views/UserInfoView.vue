@@ -16,7 +16,7 @@ const user = reactive({
 const passwordVerifcation = computed(() => {
   if (isChangePass.value === false) return true;
   if (userInfo.value.userPassword === "") {
-    // 비밀번호가 비어있다면
+    // 비밀번호가 비어있는 경우
     passwordVerifcationString.value = "비밀번호는 필수입니다.";
     return false;
   }
@@ -52,13 +52,10 @@ const deleteAccount = async () => {
 };
 
 async function signIn() {
-  console.log("로그인 정보: " + user.userPassword);
   await ustore.userConfirm(user);
   let token = sessionStorage.getItem("access-token");
-  console.log("1. confirm() token >> " + token);
   if (ustore.isLogin) {
     await ustore.getUserInfo(token);
-    console.log("4. confirm() userInfo :: ", ustore.userInfo);
     if (ustore.userInfo.isAdmin) {
       toast.success(ustore.userInfo.userId + "관리자 님 환영합니다!", {
         position: toast.POSITION.TOP_RIGHT,
@@ -70,8 +67,6 @@ async function signIn() {
       await storeIDByCookie(user.userId);
       await getIDByCookie();
     }
-    console.log("ustore userInfo: " + ustore.isLogin);
-    // router.push({ name: "home" }); // 메인 페이지로 이동
   } else {
     error.message = "아이디 또는 비밀번호가 잘못되었습니다.";
   }
@@ -82,8 +77,7 @@ const modify = async () => {
     (isChangePass.value && passwordVerifcation.value) ||
     !isChangePass.value
   ) {
-    // 비밀번호변경했고 조건을 만족했다면, 비밀번호를 변경하지 않았다면
-
+    // 비밀번호 변경했고 조건을 만족했다면, 비밀번호를 변경하지 않았다면
     await api
       .put(`${import.meta.env.VITE_VUE_API_URL}/members/`, {
         userId: userInfo.value.userId,
@@ -101,8 +95,6 @@ const modify = async () => {
         console.log(e);
       });
   } else {
-    console.log("isChangePass", isChangePass);
-    console.log("passwordVerifcation.value", passwordVerifcation.value);
     alert(passwordVerifcationString.value);
   }
 };
@@ -297,8 +289,6 @@ const changePassword = () => {
             <div class="main-content text-center">
               <form action="#">
                 <h3 class="my-5">회원정보수정이 완료되었습니다!</h3>
-
-                <!-- @click="register()" -->
                 <div class="col-12">
                   <div class="d-grid">
                     <input
@@ -375,84 +365,6 @@ const changePassword = () => {
 </template>
 
 <style scoped>
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
-@media (min-width: 768px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-}
-
-.b-example-divider {
-  width: 100%;
-  height: 3rem;
-  background-color: rgba(0, 0, 0, 0.1);
-  border: solid rgba(0, 0, 0, 0.15);
-  border-width: 1px 0;
-  box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
-    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
-}
-
-.b-example-vr {
-  flex-shrink: 0;
-  width: 1.5rem;
-  height: 100vh;
-}
-
-.bi {
-  vertical-align: -0.125em;
-  fill: currentColor;
-}
-
-.nav-scroller {
-  position: relative;
-  z-index: 2;
-  height: 2.75rem;
-  overflow-y: hidden;
-}
-
-.nav-scroller .nav {
-  display: flex;
-  flex-wrap: nowrap;
-  padding-bottom: 1rem;
-  margin-top: -1px;
-  overflow-x: auto;
-  text-align: center;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-}
-
-.btn-bd-primary {
-  --bd-violet-bg: #712cf9;
-  --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-  --bs-btn-font-weight: 600;
-  --bs-btn-color: var(--bs-white);
-  --bs-btn-bg: var(--bd-violet-bg);
-  --bs-btn-border-color: var(--bd-violet-bg);
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg: #6528e0;
-  --bs-btn-hover-border-color: #6528e0;
-  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-  --bs-btn-active-color: var(--bs-btn-hover-color);
-  --bs-btn-active-bg: #5a23c8;
-  --bs-btn-active-border-color: #5a23c8;
-}
-
-.bd-mode-toggle {
-  z-index: 1500;
-}
-
-.bd-mode-toggle .dropdown-menu .active .bi {
-  display: block !important;
-}
-
 .error-message {
   color: rgba(231, 78, 78, 0.829);
   font-size: 14px;
